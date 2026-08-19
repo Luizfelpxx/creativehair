@@ -1,24 +1,47 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { CartProvider } from "@/hooks/use-cart";
+import { Header } from "@/components/Header";
+import { Hero } from "@/components/Hero";
+import { About } from "@/components/About";
+import { ProductGrid } from "@/components/ProductGrid";
+import { Services } from "@/components/Services";
+import { Wholesale } from "@/components/Wholesale";
+import { Differentials } from "@/components/Differentials";
+import { Footer } from "@/components/Footer";
+import { CartDrawer } from "@/components/CartDrawer";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const TITLE = "Creative Hair — Mega Hair 100% Humano de Doadora Única";
+const DESCRIPTION =
+  "Extensões e mega hair 100% humanos, brasileiros e de doadora única, sem mistura de origens. Varejo, atacado e confecção sob encomenda.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <CartProvider>
+      <Header />
+      <main>
+        <Hero />
+        <About />
+        <ProductGrid />
+        <Services />
+        <Wholesale />
+        <Differentials />
+      </main>
+      <Footer />
+      <CartDrawer />
+    </CartProvider>
   );
 }
