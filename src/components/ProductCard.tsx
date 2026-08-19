@@ -25,19 +25,20 @@ function ProductImage({
   const [next, setNext] = useState<{ src: string; show: boolean } | null>(null);
 
   useEffect(() => {
-    if (src !== current && !next) {
-      setNext({ src, show: false });
-      requestAnimationFrame(() => {
-        setNext({ src, show: true });
-      });
-      const timer = setTimeout(() => {
-        setCurrent(src);
-        setNext(null);
-      }, 600);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [src, current, next]);
+    if (src === current) return undefined;
+    setNext({ src, show: false });
+    const raf = requestAnimationFrame(() => {
+      setNext({ src, show: true });
+    });
+    const timer = setTimeout(() => {
+      setCurrent(src);
+      setNext(null);
+    }, 600);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+    };
+  }, [src, current]);
 
   return (
     <div className="relative size-full overflow-hidden">
