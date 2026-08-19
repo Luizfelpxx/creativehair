@@ -93,19 +93,14 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article ref={reveal.ref} className={`group ${reveal.className}`}>
       <div className="relative mb-6 aspect-3/4 overflow-hidden bg-secondary">
-        <img
-          key={image}
+        <ProductImage
           src={image}
           alt={
             color
               ? `${product.name} na cor ${color}${size ? ` com ${size}` : ""}`
               : product.alt
           }
-          loading="lazy"
-          width={800}
-          height={1067}
-          style={{ transform: `scale(${scale})` }}
-          className="size-full origin-top animate-[fade-in_0.5s_ease-out] object-cover object-top transition-transform duration-700 ease-out"
+          scale={scale}
         />
         {(color || size) && (
           <div className="absolute inset-x-0 bottom-0 flex flex-wrap gap-2 bg-gradient-to-t from-primary/45 to-transparent p-3">
