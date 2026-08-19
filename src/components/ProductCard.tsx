@@ -179,11 +179,19 @@ export function ProductCard({ product }: { product: Product }) {
           </button>
           <button
             type="button"
-            onClick={() =>
-              openWhatsapp(
-                `Olá! Vi o ${product.name} no site da Creative Hair e queria saber mais informações sobre tamanhos e preços. Vocês têm disponível?`,
-              )
-            }
+            onClick={() => {
+              const detalhes = color && size
+                ? `na cor ${color} e tamanho ${size}`
+                : color
+                  ? `na cor ${color}`
+                  : size
+                    ? `no tamanho ${size}`
+                    : "";
+              const mensagem = detalhes
+                ? `Olá! Vi o ${product.name} ${detalhes} no site da Creative Hair e queria saber mais informações. Vocês têm disponível?`
+                : `Olá! Vi o ${product.name} no site da Creative Hair e queria saber mais informações sobre tamanhos e preços. Vocês têm disponível?`;
+              openWhatsapp(mensagem);
+            }}
             className="flex items-center justify-center gap-2 border border-primary/20 py-3 text-[10px] uppercase tracking-widest transition-colors hover:bg-rose/30"
           >
             <WhatsappIcon className="size-4 text-accent" />
