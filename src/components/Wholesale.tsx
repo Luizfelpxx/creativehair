@@ -1,30 +1,26 @@
 import { useState } from "react";
 import { openWhatsapp } from "@/lib/site-config";
+import { renderTemplate, selectionDetails, useSettings } from "@/lib/settings";
+import { CopyMessageButton } from "./CopyMessageButton";
 import { useReveal } from "@/hooks/use-reveal";
 import { PRODUCTS, SIZES, type Product, type Size } from "@/data/products";
 
 export function Wholesale() {
   const reveal = useReveal<HTMLDivElement>();
+  const settings = useSettings();
   const [productId, setProductId] = useState("");
   const [size, setSize] = useState<Size | "">("");
   const [color, setColor] = useState("");
 
   const product = productId ? PRODUCTS.find((p) => p.id === productId) : undefined;
 
-  function handleSubmit() {
-    const detalhes = product && size && color
-      ? ` para o ${product.name} na cor ${color} e tamanho ${size}`
-      : product && color
-        ? ` para o ${product.name} na cor ${color}`
-        : product && size
-          ? ` para o ${product.name} no tamanho ${size}`
-          : product
-            ? ` para o ${product.name}`
-            : "";
-    openWhatsapp(
-      `Olá! Sou profissional/salão e gostaria de solicitar a tabela de preços de atacado da Creative Hair${detalhes}.`,
-    );
-  }
+  const detalhes = product
+    ? ` para o ${product.name}${selectionDetails(size || undefined, color || undefined)}`
+    : "";
+  const mensagem = renderTemplate(settings.wholesaleTemplate, {
+    produto: product?.name ?? "",
+    detalhes,
+  });
 
   return (
     <section id="atacado" className="border-t border-border/40 py-20 lg:py-24">
@@ -99,13 +95,16 @@ export function Wholesale() {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="bg-accent px-10 py-5 text-[11px] font-bold uppercase tracking-[0.25em] text-accent-foreground transition-all hover:-translate-y-1 hover:shadow-xl"
-        >
-          Solicitar tabela de atacado
-        </button>
+        <div className="mx-auto flex max-w-sm flex-col gap-3">
+          <button
+            type="button"
+            onClick={() => openWhatsapp(mensagem)}
+            className="bg-accent px-10 py-5 text-[11px] font-bold uppercase tracking-[0.25em] text-accent-foreground transition-all hover:-translate-y-1 hover:shadow-xl"
+          >
+            Solicitar tabela de atacado
+          </button>
+          <CopyMessageButton message={mensagem} />
+        </div>
       </div>
     </section>
   );
