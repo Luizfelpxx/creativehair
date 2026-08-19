@@ -46,16 +46,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const add = useCallback((item: CartItem) => {
     setItems((current) => {
       const index = current.findIndex((i) => key(i) === key(item));
-      if (index === -1) return [...current, item];
+      const existing = index === -1 ? undefined : current[index];
+      if (!existing) return [...current, item];
       const next = [...current];
-      next[index] = {
-        ...next[index],
-        quantity: next[index].quantity + item.quantity,
-      };
+      next[index] = { ...existing, quantity: existing.quantity + item.quantity };
       return next;
     });
     setIsOpen(true);
   }, []);
+
 
   const patch = useCallback((index: number, changes: Partial<CartItem>) => {
     setItems((current) =>
