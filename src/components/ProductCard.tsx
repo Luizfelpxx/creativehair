@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getPrice,
   getProductImage,
@@ -11,6 +11,64 @@ import { formatBRL, openWhatsapp } from "@/lib/site-config";
 import { useCart } from "@/hooks/use-cart";
 import { useReveal } from "@/hooks/use-reveal";
 import { WhatsappIcon } from "./WhatsappIcon";
+
+function ProductImage({
+  src,
+  alt,
+  scale,
+}: {
+  src: string;
+  alt: string;
+  scale: number;
+}) {
+  const [current, setCurrent] = useState(src);
+  const [next, setNext] = useState<{ src: string; show: boolean } | null>(null);
+
+  useEffect(() => {
+    if (src !== current && !next) {
+      setNext({ src, show: false });
+      requestAnimationFrame(() => {
+        setNext({ src, show: true });
+      });
+      const timer = setTimeout(() => {
+        setCurrent(src);
+        setNext(null);
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [src, current, next]);
+
+  return (
+    <div className="relative size-full overflow-hidden">
+      <img
+        src={current}
+        alt={alt}
+        loading="lazy"
+        width={800}
+        height={1067}
+        className="absolute inset-0 size-full origin-top object-cover object-top transition-all duration-500 ease-out"
+        style={{
+          transform: `scale(${scale})${next?.show ? " translateY(-8px)" : " translateY(0)"}`,
+          opacity: next?.show ? 0 : 1,
+        }}
+      />
+      {next && (
+        <img
+          src={next.src}
+          alt={alt}
+          loading="lazy"
+          width={800}
+          height={1067}
+          className="absolute inset-0 size-full origin-top object-cover object-top transition-all duration-500 ease-out"
+          style={{
+            transform: `scale(${scale})${next.show ? " translateY(0)" : " translateY(8px)"}`,
+            opacity: next.show ? 1 : 0,
+          }}
+        />
+      )}
+    </div>
+  );
+}
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
