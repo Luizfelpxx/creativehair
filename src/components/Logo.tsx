@@ -1,10 +1,8 @@
-import logo from "@/assets/creative-hair-logo.jpg.asset.json";
-
 /** Logo oficial da marca Creative Hair. */
 export function Logo({ className = "" }: { className?: string }) {
   return (
     <img
-      src={logo.url}
+      src="/creative-hair-logo.png"
       alt="Creative Hair — extensões de cabelo"
       width={1291}
       height={1130}
