@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getPrice,
   getProductImage,
@@ -11,6 +11,66 @@ import { formatBRL, openWhatsapp } from "@/lib/site-config";
 import { useCart } from "@/hooks/use-cart";
 import { useReveal } from "@/hooks/use-reveal";
 import { WhatsappIcon } from "./WhatsappIcon";
+
+function ProductImage({
+  src,
+  alt,
+  scale,
+}: {
+  src: string;
+  alt: string;
+  scale: number;
+}) {
+  const [current, setCurrent] = useState(src);
+  const [next, setNext] = useState<{ src: string; show: boolean } | null>(null);
+
+  useEffect(() => {
+    if (src === current) return undefined;
+    setNext({ src, show: false });
+    const raf = requestAnimationFrame(() => {
+      setNext({ src, show: true });
+    });
+    const timer = setTimeout(() => {
+      setCurrent(src);
+      setNext(null);
+    }, 600);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+    };
+  }, [src, current]);
+
+  return (
+    <div className="relative size-full overflow-hidden">
+      <img
+        src={current}
+        alt={alt}
+        loading="lazy"
+        width={800}
+        height={1067}
+        className="absolute inset-0 size-full origin-top object-cover object-top transition-all duration-500 ease-out"
+        style={{
+          transform: `scale(${scale})${next?.show ? " translateY(-8px)" : " translateY(0)"}`,
+          opacity: next?.show ? 0 : 1,
+        }}
+      />
+      {next && (
+        <img
+          src={next.src}
+          alt={alt}
+          loading="lazy"
+          width={800}
+          height={1067}
+          className="absolute inset-0 size-full origin-top object-cover object-top transition-all duration-500 ease-out"
+          style={{
+            transform: `scale(${scale})${next.show ? " translateY(0)" : " translateY(8px)"}`,
+            opacity: next.show ? 1 : 0,
+          }}
+        />
+      )}
+    </div>
+  );
+}
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
@@ -35,19 +95,14 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article ref={reveal.ref} className={`group ${reveal.className}`}>
       <div className="relative mb-6 aspect-3/4 overflow-hidden bg-secondary">
-        <img
-          key={image}
+        <ProductImage
           src={image}
           alt={
             color
               ? `${product.name} na cor ${color}${size ? ` com ${size}` : ""}`
               : product.alt
           }
-          loading="lazy"
-          width={800}
-          height={1067}
-          style={{ transform: `scale(${scale})` }}
-          className="size-full origin-top animate-[fade-in_0.5s_ease-out] object-cover object-top transition-transform duration-700 ease-out"
+          scale={scale}
         />
         {(color || size) && (
           <div className="absolute inset-x-0 bottom-0 flex flex-wrap gap-2 bg-gradient-to-t from-primary/45 to-transparent p-3">
