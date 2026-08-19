@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -39,9 +40,48 @@ export function itemPrice(item: CartItem): number {
   return getPrice(product, item.size, item.color);
 }
 
+const STORAGE_KEY = "creative-hair:cart";
+
+function readStoredCart(): CartItem[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as CartItem[];
+    if (!Array.isArray(parsed)) return [];
+    // Mantém apenas itens válidos (produto, tamanho e cor ainda existentes).
+    return parsed.filter((item) => {
+      const product = PRODUCTS.find((p) => p.id === item.productId);
+      return Boolean(
+        product &&
+          product.colors.includes(item.color) &&
+          item.size &&
+          item.quantity > 0,
+      );
+    });
+  } catch {
+    return [];
+  }
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+
+  // Restaura a sacola salva no navegador (tamanho e cor incluídos).
+  useEffect(() => {
+    const stored = readStoredCart();
+    if (stored.length > 0) setItems(stored);
+  }, []);
+
+  // Persiste a sacola a cada alteração.
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    } catch {
+      /* armazenamento indisponível */
+    }
+  }, [items]);
 
   const add = useCallback((item: CartItem) => {
     setItems((current) => {
