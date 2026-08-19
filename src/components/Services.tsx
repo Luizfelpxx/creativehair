@@ -1,4 +1,6 @@
 import { openWhatsapp } from "@/lib/site-config";
+import { renderTemplate, useSettings } from "@/lib/settings";
+import { CopyMessageButton } from "./CopyMessageButton";
 import { useReveal } from "@/hooks/use-reveal";
 
 const SERVICES = [
@@ -18,6 +20,7 @@ const SERVICES = [
 
 export function Services() {
   const reveal = useReveal<HTMLDivElement>();
+  const settings = useSettings();
 
   return (
     <section id="servicos" className="bg-rose/15 py-20 lg:py-24">
@@ -30,7 +33,11 @@ export function Services() {
         </div>
 
         <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2">
-          {SERVICES.map((service) => (
+          {SERVICES.map((service) => {
+            const mensagem = renderTemplate(settings.serviceTemplate, {
+              servico: service.name,
+            });
+            return (
             <div
               key={service.name}
               className="space-y-6 border border-border/60 bg-background p-8 lg:p-10"
@@ -44,19 +51,19 @@ export function Services() {
                   <li key={item}>• {item}</li>
                 ))}
               </ul>
-              <button
-                type="button"
-                onClick={() =>
-                  openWhatsapp(
-                    `Olá! Gostaria de solicitar um orçamento para o serviço de ${service.name} da Creative Hair.`,
-                  )
-                }
-                className="w-full border border-primary py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-primary hover:text-primary-foreground"
-              >
-                Solicitar orçamento
-              </button>
+              <div className="grid gap-2">
+                <button
+                  type="button"
+                  onClick={() => openWhatsapp(mensagem)}
+                  className="w-full border border-primary py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-primary hover:text-primary-foreground"
+                >
+                  Solicitar orçamento
+                </button>
+                <CopyMessageButton message={mensagem} />
+              </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

@@ -8,6 +8,8 @@ import {
   type Size,
 } from "@/data/products";
 import { formatBRL, openWhatsapp } from "@/lib/site-config";
+import { renderTemplate, selectionDetails, useSettings } from "@/lib/settings";
+import { CopyMessageButton } from "./CopyMessageButton";
 import { useCart } from "@/hooks/use-cart";
 import { useReveal } from "@/hooks/use-reveal";
 import { WhatsappIcon } from "./WhatsappIcon";
@@ -74,6 +76,7 @@ function ProductImage({
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
+  const settings = useSettings();
   const reveal = useReveal<HTMLElement>();
   const [size, setSize] = useState<Size | "">("");
   const [color, setColor] = useState("");
@@ -82,6 +85,18 @@ export function ProductCard({ product }: { product: Product }) {
   const price = size && color ? getPrice(product, size, color) : null;
   const image = getProductImage(product, color);
   const scale = getSizeScale(size);
+
+  const detalhes = selectionDetails(size || undefined, color || undefined);
+  const perguntaMensagem = renderTemplate(settings.productTemplate, {
+    produto: product.name,
+    detalhes,
+  });
+  const atacadoMensagem = renderTemplate(settings.wholesaleTemplate, {
+    produto: product.name,
+    detalhes: detalhes
+      ? ` para o ${product.name}${detalhes}`
+      : ` para o ${product.name}`,
+  });
 
   function handleAdd() {
     if (!size || !color) {
@@ -180,19 +195,7 @@ export function ProductCard({ product }: { product: Product }) {
           <div className="grid gap-2 sm:grid-cols-2">
             <button
               type="button"
-              onClick={() => {
-                const detalhes = color && size
-                  ? `na cor ${color} e tamanho ${size}`
-                  : color
-                    ? `na cor ${color}`
-                    : size
-                      ? `no tamanho ${size}`
-                      : "";
-                const mensagem = detalhes
-                  ? `Olá! Vi o ${product.name} ${detalhes} no site da Creative Hair e queria saber mais informações. Vocês têm disponível?`
-                  : `Olá! Vi o ${product.name} no site da Creative Hair e queria saber mais informações sobre tamanhos e preços. Vocês têm disponível?`;
-                openWhatsapp(mensagem);
-              }}
+              onClick={() => openWhatsapp(perguntaMensagem)}
               className="flex items-center justify-center gap-2 border border-primary/20 py-3 text-[10px] uppercase tracking-widest transition-colors hover:bg-rose/30"
             >
               <WhatsappIcon className="size-4 text-accent" />
@@ -200,23 +203,13 @@ export function ProductCard({ product }: { product: Product }) {
             </button>
             <button
               type="button"
-              onClick={() => {
-                const detalhes = color && size
-                  ? ` para o ${product.name} na cor ${color} e tamanho ${size}`
-                  : color
-                    ? ` para o ${product.name} na cor ${color}`
-                    : size
-                      ? ` para o ${product.name} no tamanho ${size}`
-                      : "";
-                openWhatsapp(
-                  `Olá! Sou profissional/salão e gostaria de solicitar a tabela de preços de atacado da Creative Hair${detalhes}.`,
-                );
-              }}
+              onClick={() => openWhatsapp(atacadoMensagem)}
               className="flex items-center justify-center gap-2 border border-accent/20 py-3 text-[10px] uppercase tracking-widest text-accent transition-colors hover:bg-accent/10"
             >
               Solicitar Atacado
             </button>
           </div>
+          <CopyMessageButton message={perguntaMensagem} label="Copiar mensagem" />
         </div>
       </div>
     </article>

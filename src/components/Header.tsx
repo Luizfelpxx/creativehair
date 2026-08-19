@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useCart } from "@/hooks/use-cart";
+import { Logo } from "./Logo";
 
 const LINKS = [
   { href: "#inicio", label: "Início" },
@@ -36,14 +37,12 @@ export function Header() {
           <span className="h-px w-5 bg-foreground" />
         </button>
 
-        {/* Espaço reservado para a logo da marca */}
-        <a href="#inicio" className="flex min-w-0 flex-col items-center justify-center text-center">
-          <span className="font-serif text-lg font-bold tracking-tight sm:text-2xl">
-            CREATIVE HAIR
-          </span>
-          <span className="-mt-0.5 text-[7px] uppercase tracking-[0.35em] opacity-60 sm:text-[8px] sm:tracking-[0.4em]">
-            Premium Extensions
-          </span>
+        <a
+          href="#inicio"
+          aria-label="Creative Hair — início"
+          className="flex min-w-0 items-center justify-center"
+        >
+          <Logo className="h-10 sm:h-12 lg:h-14" />
         </a>
 
         <div className="flex shrink-0 items-center gap-6">

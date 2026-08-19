@@ -1,29 +1,28 @@
 import { PRODUCTS, SIZES, type Size } from "@/data/products";
 import { itemPrice, useCart } from "@/hooks/use-cart";
 import { formatBRL, openWhatsapp } from "@/lib/site-config";
+import { renderTemplate, useSettings } from "@/lib/settings";
+import { CopyMessageButton } from "./CopyMessageButton";
 
 export function CartDrawer() {
   const cart = useCart();
+  const settings = useSettings();
 
   if (!cart.isOpen) return null;
 
-  function finalizar() {
-    const linhas = cart.items.map((item) => {
+  const itens = cart.items
+    .map((item) => {
       const product = PRODUCTS.find((p) => p.id === item.productId);
       return `- ${product?.name ?? item.productId}, ${item.size}, ${item.color} x${item.quantity} - ${formatBRL(
         itemPrice(item) * item.quantity,
       )}`;
-    });
+    })
+    .join("\n");
 
-    const mensagem = [
-      "Olá! Gostaria de finalizar meu pedido na Creative Hair:",
-      ...linhas,
-      `Total: ${formatBRL(cart.subtotal)}`,
-      "Vocês aceitam Pix? Podem confirmar disponibilidade e prazo de entrega?",
-    ].join("\n");
-
-    openWhatsapp(mensagem);
-  }
+  const mensagem = renderTemplate(settings.checkoutTemplate, {
+    itens,
+    total: formatBRL(cart.subtotal),
+  });
 
   return (
     <div className="fixed inset-0 z-100 flex justify-end">
@@ -140,12 +139,18 @@ export function CartDrawer() {
           </div>
           <button
             type="button"
-            onClick={finalizar}
+            onClick={() => openWhatsapp(mensagem)}
             disabled={cart.items.length === 0}
             className="w-full bg-primary py-5 text-[11px] font-bold uppercase tracking-[0.2em] text-primary-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
           >
             Finalizar Pedido pelo WhatsApp
           </button>
+          <CopyMessageButton
+            message={mensagem}
+            disabled={cart.items.length === 0}
+            label="Copiar mensagem do pedido"
+            className="w-full"
+          />
           <p className="text-center text-[9px] uppercase tracking-widest text-foreground/40">
             Pagamento facilitado via Pix
           </p>
