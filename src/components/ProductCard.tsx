@@ -169,7 +169,7 @@ export function ProductCard({ product }: { product: Product }) {
 
         {error && <p className="text-[10px] uppercase tracking-widest text-destructive">{error}</p>}
 
-        <div className="grid gap-2 pt-2 sm:grid-cols-2">
+        <div className="grid gap-2 pt-2">
           <button
             type="button"
             onClick={handleAdd}
@@ -177,26 +177,46 @@ export function ProductCard({ product }: { product: Product }) {
           >
             Adicionar
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              const detalhes = color && size
-                ? `na cor ${color} e tamanho ${size}`
-                : color
-                  ? `na cor ${color}`
-                  : size
-                    ? `no tamanho ${size}`
-                    : "";
-              const mensagem = detalhes
-                ? `Olá! Vi o ${product.name} ${detalhes} no site da Creative Hair e queria saber mais informações. Vocês têm disponível?`
-                : `Olá! Vi o ${product.name} no site da Creative Hair e queria saber mais informações sobre tamanhos e preços. Vocês têm disponível?`;
-              openWhatsapp(mensagem);
-            }}
-            className="flex items-center justify-center gap-2 border border-primary/20 py-3 text-[10px] uppercase tracking-widest transition-colors hover:bg-rose/30"
-          >
-            <WhatsappIcon className="size-4 text-accent" />
-            Perguntar
-          </button>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => {
+                const detalhes = color && size
+                  ? `na cor ${color} e tamanho ${size}`
+                  : color
+                    ? `na cor ${color}`
+                    : size
+                      ? `no tamanho ${size}`
+                      : "";
+                const mensagem = detalhes
+                  ? `Olá! Vi o ${product.name} ${detalhes} no site da Creative Hair e queria saber mais informações. Vocês têm disponível?`
+                  : `Olá! Vi o ${product.name} no site da Creative Hair e queria saber mais informações sobre tamanhos e preços. Vocês têm disponível?`;
+                openWhatsapp(mensagem);
+              }}
+              className="flex items-center justify-center gap-2 border border-primary/20 py-3 text-[10px] uppercase tracking-widest transition-colors hover:bg-rose/30"
+            >
+              <WhatsappIcon className="size-4 text-accent" />
+              Perguntar
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const detalhes = color && size
+                  ? ` para o ${product.name} na cor ${color} e tamanho ${size}`
+                  : color
+                    ? ` para o ${product.name} na cor ${color}`
+                    : size
+                      ? ` para o ${product.name} no tamanho ${size}`
+                      : "";
+                openWhatsapp(
+                  `Olá! Sou profissional/salão e gostaria de solicitar a tabela de preços de atacado da Creative Hair${detalhes}.`,
+                );
+              }}
+              className="flex items-center justify-center gap-2 border border-accent/20 py-3 text-[10px] uppercase tracking-widest text-accent transition-colors hover:bg-accent/10"
+            >
+              Solicitar Atacado
+            </button>
+          </div>
         </div>
       </div>
     </article>
