@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { getPrice, SIZES, type Product, type Size } from "@/data/products";
+import {
+  getPrice,
+  getProductImage,
+  getSizeScale,
+  SIZES,
+  type Product,
+  type Size,
+} from "@/data/products";
 import { formatBRL, openWhatsapp } from "@/lib/site-config";
 import { useCart } from "@/hooks/use-cart";
 import { useReveal } from "@/hooks/use-reveal";
@@ -13,6 +20,8 @@ export function ProductCard({ product }: { product: Product }) {
   const [error, setError] = useState("");
 
   const price = size && color ? getPrice(product, size, color) : null;
+  const image = getProductImage(product, color);
+  const scale = getSizeScale(size);
 
   function handleAdd() {
     if (!size || !color) {
@@ -27,14 +36,35 @@ export function ProductCard({ product }: { product: Product }) {
     <article ref={reveal.ref} className={`group ${reveal.className}`}>
       <div className="relative mb-6 aspect-3/4 overflow-hidden bg-secondary">
         <img
-          src={product.image}
-          alt={product.alt}
+          key={image}
+          src={image}
+          alt={
+            color
+              ? `${product.name} na cor ${color}${size ? ` com ${size}` : ""}`
+              : product.alt
+          }
           loading="lazy"
           width={800}
           height={1067}
-          className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
+          style={{ transform: `scale(${scale})` }}
+          className="size-full origin-top animate-[fade-in_0.5s_ease-out] object-cover object-top transition-transform duration-700 ease-out"
         />
+        {(color || size) && (
+          <div className="absolute inset-x-0 bottom-0 flex flex-wrap gap-2 bg-gradient-to-t from-primary/45 to-transparent p-3">
+            {size && (
+              <span className="bg-background/85 px-2 py-1 text-[9px] font-bold uppercase tracking-widest text-foreground/80">
+                {size}
+              </span>
+            )}
+            {color && (
+              <span className="bg-background/85 px-2 py-1 text-[9px] font-bold uppercase tracking-widest text-foreground/80">
+                {color}
+              </span>
+            )}
+          </div>
+        )}
       </div>
+
 
       <div className="space-y-3">
         <h3 className="font-serif text-xl">{product.name}</h3>
