@@ -36,6 +36,7 @@ function ProductImage({
       }, 600);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [src, current, next]);
 
   return (
