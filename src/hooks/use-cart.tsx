@@ -53,10 +53,7 @@ function readStoredCart(): CartItem[] {
     return parsed.filter((item) => {
       const product = PRODUCTS.find((p) => p.id === item.productId);
       return Boolean(
-        product &&
-          product.colors.includes(item.color) &&
-          item.size &&
-          item.quantity > 0,
+        product && product.colors.includes(item.color) && item.size && item.quantity > 0,
       );
     });
   } catch {
@@ -95,18 +92,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setIsOpen(true);
   }, []);
 
-
   const patch = useCallback((index: number, changes: Partial<CartItem>) => {
-    setItems((current) =>
-      current.map((item, i) => (i === index ? { ...item, ...changes } : item)),
-    );
+    setItems((current) => current.map((item, i) => (i === index ? { ...item, ...changes } : item)));
   }, []);
 
   const value = useMemo<CartContextValue>(() => {
-    const subtotal = items.reduce(
-      (total, item) => total + itemPrice(item) * item.quantity,
-      0,
-    );
+    const subtotal = items.reduce((total, item) => total + itemPrice(item) * item.quantity, 0);
     return {
       items,
       count: items.reduce((total, item) => total + item.quantity, 0),
@@ -115,8 +106,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       open: () => setIsOpen(true),
       close: () => setIsOpen(false),
       add,
-      remove: (index) =>
-        setItems((current) => current.filter((_, i) => i !== index)),
+      remove: (index) => setItems((current) => current.filter((_, i) => i !== index)),
       updateQuantity: (index, quantity) =>
         quantity < 1
           ? setItems((current) => current.filter((_, i) => i !== index))

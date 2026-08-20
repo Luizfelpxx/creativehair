@@ -14,15 +14,7 @@ import { useCart } from "@/hooks/use-cart";
 import { useReveal } from "@/hooks/use-reveal";
 import { WhatsappIcon } from "./WhatsappIcon";
 
-function ProductImage({
-  src,
-  alt,
-  scale,
-}: {
-  src: string;
-  alt: string;
-  scale: number;
-}) {
+function ProductImage({ src, alt, scale }: { src: string; alt: string; scale: number }) {
   const [current, setCurrent] = useState(src);
   const [next, setNext] = useState<{ src: string; show: boolean } | null>(null);
 
@@ -93,9 +85,7 @@ export function ProductCard({ product }: { product: Product }) {
   });
   const atacadoMensagem = renderTemplate(settings.wholesaleTemplate, {
     produto: product.name,
-    detalhes: detalhes
-      ? ` para o ${product.name}${detalhes}`
-      : ` para o ${product.name}`,
+    detalhes: detalhes ? ` para o ${product.name}${detalhes}` : ` para o ${product.name}`,
   });
 
   function handleAdd() {
@@ -112,11 +102,7 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="relative mb-6 aspect-3/4 overflow-hidden bg-secondary">
         <ProductImage
           src={image}
-          alt={
-            color
-              ? `${product.name} na cor ${color}${size ? ` com ${size}` : ""}`
-              : product.alt
-          }
+          alt={color ? `${product.name} na cor ${color}${size ? ` com ${size}` : ""}` : product.alt}
           scale={scale}
         />
         {(color || size) && (
@@ -134,7 +120,6 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         )}
       </div>
-
 
       <div className="space-y-3">
         <h3 className="font-serif text-xl">{product.name}</h3>
@@ -179,7 +164,11 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
 
         <p className="pt-1 font-serif text-lg">
-          {price !== null ? formatBRL(price) : <span className="text-sm text-foreground/50">Selecione tamanho e cor</span>}
+          {price !== null ? (
+            formatBRL(price)
+          ) : (
+            <span className="text-sm text-foreground/50">Selecione tamanho e cor</span>
+          )}
         </p>
 
         {error && <p className="text-[10px] uppercase tracking-widest text-destructive">{error}</p>}

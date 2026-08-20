@@ -3,6 +3,7 @@
 Crie um site institucional/vitrine profissional para a "Creative Hair", uma marca que vende extensões e mega hair 100% humano, de doadora única, brasileiros e sem mistura de origens, com foco em qualidade premium. Vende tanto no varejo (consumidor final) quanto no atacado (profissionais de cabelo/salões), além de oferecer serviços de confecção sob encomenda.
 
 IDENTIDADE VISUAL:
+
 - Paleta de cores: tons neutros, nude e pastéis (ex: bege, off-white, nude rosado, marrom claro suave, dourado fosco como cor de destaque/detalhe)
 - Estilo visual: elegante, sofisticado, "clean luxury" — muito espaço em branco, tipografia serifada ou serifada+sans combinadas para transmitir premium, fotos grandes de alta qualidade dos cabelos
 - Use como referência de layout/estilo o site: https://www.luxuryextensions.com.br/ (mesma sensação de loja de beleza premium)
@@ -24,8 +25,8 @@ ESTRUTURA DO SITE:
    - Cabelo Brasileiro Loiro Escuro
    - Cabelo Brasileiro Moreno Iluminado
    - Cabelo Brasileiro Cacheado
-   Cada produto deve ter: foto, nome, descrição curta, e um seletor de tamanho com as opções: 45cm, 50cm, 55cm, 60cm, 65cm, 70cm, 75cm, 80cm, 85cm, 90cm (o preço pode variar por tamanho e por cor — deixe um campo de preço editável por tamanho, mesmo que eu preencha com valores fictícios por enquanto, pois a tabela real ainda será enviada pela cliente)
-   Cada card também deve ter um botão secundário "Perguntar sobre este produto" (ícone de WhatsApp)
+     Cada produto deve ter: foto, nome, descrição curta, e um seletor de tamanho com as opções: 45cm, 50cm, 55cm, 60cm, 65cm, 70cm, 75cm, 80cm, 85cm, 90cm (o preço pode variar por tamanho e por cor — deixe um campo de preço editável por tamanho, mesmo que eu preencha com valores fictícios por enquanto, pois a tabela real ainda será enviada pela cliente)
+     Cada card também deve ter um botão secundário "Perguntar sobre este produto" (ícone de WhatsApp)
 
 5. Seção "Serviços de Confecção" (separada do catálogo de produtos, com identidade visual própria dentro do mesmo estilo do site):
    - Título: "Confecção Personalizada"
@@ -42,6 +43,7 @@ ESTRUTURA DO SITE:
 8. Rodapé com logo, e-mail comercial (eloandradede@gmail.com), forma de pagamento aceita (Pix) e créditos
 
 FUNCIONALIDADE DE CARRINHO:
+
 - Ícone de carrinho fixo no header mostrando quantidade de itens
 - Ao adicionar um produto, é obrigatório selecionar o tamanho e a cor antes de confirmar
 - Carrinho em drawer lateral, editável (aumentar/diminuir quantidade, trocar tamanho, trocar cor, remover item)
@@ -49,6 +51,7 @@ FUNCIONALIDADE DE CARRINHO:
 - Serviços de confecção (Nano Slim, Tic Tac) NÃO entram no carrinho, pois são sob orçamento
 
 CHECKOUT VIA WHATSAPP (MUITO IMPORTANTE):
+
 - NÃO implementar checkout/pagamento dentro do site
 - Botão final do carrinho: "Finalizar Pedido pelo WhatsApp"
 - Ao clicar, montar automaticamente uma mensagem de texto pré-formatada, como se fosse a própria cliente final falando, listando cada produto do carrinho com nome, tamanho, quantidade e preço, e o valor total. Exemplo:
@@ -56,29 +59,34 @@ CHECKOUT VIA WHATSAPP (MUITO IMPORTANTE):
   - Cabelo Brasileiro Loiro Mesclado, 60cm x1 - R$[Preço]
   - Cabelo Brasileiro Cacheado, 50cm x1 - R$[Preço]
   Total: R$[Total]
-  Vocês aceitam Pix? Podem confirmar disponibilidade e prazo de entrega?"
+    Vocês aceitam Pix? Podem confirmar disponibilidade e prazo de entrega?"
 - Redirecionar para: https://wa.me/[+5521999057833]?text=[MENSAGEM_CODIFICADA_EM_URL]
 - Usar encodeURIComponent (ou equivalente) para montar a URL corretamente com quebras de linha e acentos
 - Deixar o número de WhatsApp como uma constante única no início do código (ex: const WHATSAPP_NUMBER = "+5521999057833"), fácil de eu substituir depois em um único lugar
 
 BOTÃO DE WHATSAPP EM CADA PRODUTO:
+
 - Ao clicar em "Perguntar sobre este produto", abrir o WhatsApp com mensagem pré-formatada específica, como se fosse a cliente final perguntando. Exemplo:
   "Olá! Vi o [Nome do Produto] no site da Creative Hair e queria saber mais informações sobre tamanhos e preços. Vocês têm disponível?"
 
 BOTÃO DE SERVIÇOS (NANO SLIM / TIC TAC):
+
 - Ao clicar em "Solicitar orçamento" em um dos cards de serviço, gerar mensagem própria para WhatsApp, exemplo:
   "Olá! Gostaria de solicitar um orçamento para o serviço de [Nome do Serviço] da Creative Hair."
 
 BOTÃO DE ATACADO:
+
 - No CTA "Solicitar tabela de atacado", gerar mensagem própria para WhatsApp:
   "Olá! Sou profissional/salão e gostaria de solicitar a tabela de preços de atacado da Creative Hair."
 
 REQUISITOS TÉCNICOS:
+
 - Código limpo, organizado em componentes separados (Header, Hero, About, ProductCard, ServiceCard, Wholesale, Cart, Footer etc.), fácil de eu editar manualmente depois
 - Sem dependências desnecessárias
 - Otimizado para carregamento rápido de imagens
 - SEO básico configurado (title, meta description, alt em imagens)
-```
+
+````
 
 ---
 
@@ -108,4 +116,4 @@ git clone <this-repository-url>
 cd <repository-name>
 npm i
 npm run dev
-```
+````

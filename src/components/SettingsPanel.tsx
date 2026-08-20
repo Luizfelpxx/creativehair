@@ -49,7 +49,10 @@ function validate(values: SiteSettings): string {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.contactEmail)) {
     return "Informe um e-mail válido.";
   }
-  if (!values.checkoutTemplate.includes("{itens}") || !values.checkoutTemplate.includes("{total}")) {
+  if (
+    !values.checkoutTemplate.includes("{itens}") ||
+    !values.checkoutTemplate.includes("{total}")
+  ) {
     return "A mensagem de pedido precisa conter {itens} e {total}.";
   }
   if (!values.productTemplate.includes("{produto}")) {

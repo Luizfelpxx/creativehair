@@ -38,30 +38,30 @@ export function Services() {
               servico: service.name,
             });
             return (
-            <div
-              key={service.name}
-              className="space-y-6 border border-border/60 bg-background p-8 lg:p-10"
-            >
-              <h3 className="font-serif text-2xl">{service.name}</h3>
-              <p className="text-sm italic leading-relaxed text-foreground/70">
-                {service.description}
-              </p>
-              <ul className="space-y-2 text-[11px] uppercase tracking-widest opacity-60">
-                {service.highlights.map((item) => (
-                  <li key={item}>• {item}</li>
-                ))}
-              </ul>
-              <div className="grid gap-2">
-                <button
-                  type="button"
-                  onClick={() => openWhatsapp(mensagem)}
-                  className="w-full border border-primary py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-primary hover:text-primary-foreground"
-                >
-                  Solicitar orçamento
-                </button>
-                <CopyMessageButton message={mensagem} />
+              <div
+                key={service.name}
+                className="space-y-6 border border-border/60 bg-background p-8 lg:p-10"
+              >
+                <h3 className="font-serif text-2xl">{service.name}</h3>
+                <p className="text-sm italic leading-relaxed text-foreground/70">
+                  {service.description}
+                </p>
+                <ul className="space-y-2 text-[11px] uppercase tracking-widest opacity-60">
+                  {service.highlights.map((item) => (
+                    <li key={item}>• {item}</li>
+                  ))}
+                </ul>
+                <div className="grid gap-2">
+                  <button
+                    type="button"
+                    onClick={() => openWhatsapp(mensagem)}
+                    className="w-full border border-primary py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-primary hover:text-primary-foreground"
+                  >
+                    Solicitar orçamento
+                  </button>
+                  <CopyMessageButton message={mensagem} />
+                </div>
               </div>
-            </div>
             );
           })}
         </div>
