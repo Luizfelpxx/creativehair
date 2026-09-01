@@ -33,10 +33,21 @@ export const SIZES = [
 
 export type Size = (typeof SIZES)[number];
 
+/** Categorias da vitrine (a ordem define a exibição na página). */
+export const CATEGORIES = ["Mega Hair", "Toppers / Topo de Cabelo"] as const;
+
+export type Category = (typeof CATEGORIES)[number];
+
 export type Product = {
   id: string;
   name: string;
+  /** Categoria da vitrine. Padrão: "Mega Hair". */
+  category?: Category;
   description: string;
+  /** Lista de características exibidas no card (opcional). */
+  features?: string[];
+  /** Tamanhos disponíveis para este produto (padrão: todos). */
+  sizes?: readonly Size[];
   image: string;
   alt: string;
   /** Cores/tonalidades disponíveis para este cabelo. */
