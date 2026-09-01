@@ -99,7 +99,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <article ref={reveal.ref} className={`group ${reveal.className}`}>
-      <div className="relative mb-6 aspect-3/4 overflow-hidden bg-secondary">
+      <div className="relative mb-6 aspect-3/4 overflow-hidden bg-blush/30">
         <ProductImage
           src={image}
           alt={color ? `${product.name} na cor ${color}${size ? ` com ${size}` : ""}` : product.alt}
@@ -185,7 +185,7 @@ export function ProductCard({ product }: { product: Product }) {
             <button
               type="button"
               onClick={() => openWhatsapp(perguntaMensagem)}
-              className="flex items-center justify-center gap-2 border border-primary/20 py-3 text-[10px] uppercase tracking-widest transition-colors hover:bg-rose/30"
+              className="flex items-center justify-center gap-2 border border-primary/20 py-3 text-[10px] uppercase tracking-widest transition-colors hover:bg-sky/40"
             >
               <WhatsappIcon className="size-4 text-accent" />
               Perguntar

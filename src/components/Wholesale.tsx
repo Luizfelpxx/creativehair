@@ -23,7 +23,7 @@ export function Wholesale() {
   });
 
   return (
-    <section id="atacado" className="border-t border-border/40 py-20 lg:py-24">
+    <section id="atacado" className="border-t border-border/40 bg-linear-to-b from-blush/30 via-background to-sky/30 py-20 lg:py-24">
       <div ref={reveal.ref} className={`mx-auto max-w-2xl px-6 text-center ${reveal.className}`}>
         <h2 className="mb-6 font-serif text-3xl lg:text-4xl">Para Profissionais e Salões</h2>
         <p className="mb-10 font-light text-foreground/70">
