@@ -49,6 +49,9 @@
   --color-rose: var(--rose);
   --color-gold: var(--gold);
   --color-ink: var(--ink);
+  --color-blush: var(--blush);
+  --color-sky: var(--sky);
+
 }
 
 :root {
