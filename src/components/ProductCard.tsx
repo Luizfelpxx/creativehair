@@ -147,7 +147,7 @@ export function ProductCard({ product }: { product: Product }) {
               className="w-full border border-border bg-transparent px-3 py-2 text-xs transition-colors focus:border-accent focus:outline-none"
             >
               <option value="">Selecionar</option>
-              {SIZES.map((option) => (
+              {getSizes(product).map((option) => (
                 <option key={option} value={option}>
                   {option} — {formatBRL(product.priceBySize[option])}
                 </option>
