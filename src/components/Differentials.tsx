@@ -12,7 +12,7 @@ export function Differentials() {
   const reveal = useReveal<HTMLDivElement>();
 
   return (
-    <section className="bg-secondary/40 py-16 lg:py-20">
+    <section className="bg-sky/40 py-16 lg:py-20">
       <div
         ref={reveal.ref}
         className={`mx-auto grid max-w-7xl grid-cols-2 gap-10 px-6 text-center md:grid-cols-5 ${reveal.className}`}

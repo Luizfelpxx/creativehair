@@ -23,7 +23,7 @@ export function Services() {
   const settings = useSettings();
 
   return (
-    <section id="servicos" className="bg-rose/15 py-20 lg:py-24">
+    <section id="servicos" className="bg-blush/40 py-20 lg:py-24">
       <div ref={reveal.ref} className={`mx-auto max-w-7xl px-6 ${reveal.className}`}>
         <div className="mb-12 text-center lg:mb-16">
           <h2 className="mb-4 font-serif text-3xl lg:text-4xl">Confecção Personalizada</h2>
@@ -40,7 +40,7 @@ export function Services() {
             return (
               <div
                 key={service.name}
-                className="space-y-6 border border-border/60 bg-background p-8 lg:p-10"
+                className="space-y-6 border border-border/60 bg-background p-8 shadow-sm transition-colors hover:border-sky lg:p-10"
               >
                 <h3 className="font-serif text-2xl">{service.name}</h3>
                 <p className="text-sm italic leading-relaxed text-foreground/70">
