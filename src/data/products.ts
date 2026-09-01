@@ -15,6 +15,7 @@ import corMorenoIluminado from "@/assets/cor-moreno-iluminado.jpg";
 import corMorenoCaramelo from "@/assets/cor-moreno-caramelo.jpg";
 import corCacheadoPreto from "@/assets/cor-cacheado-preto.jpg";
 import corCacheadoCastanhoEscuro from "@/assets/cor-cacheado-castanho-escuro.jpg";
+import topperLoiroAsset from "@/assets/topper-capilar-loiro.jpg.asset.json";
 
 /** Tamanhos disponíveis (cm). */
 export const SIZES = [
