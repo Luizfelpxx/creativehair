@@ -65,6 +65,10 @@
   --rose: oklch(0.877 0.021 62);
   --gold: oklch(0.735 0.036 74);
   --ink: oklch(0.26 0.006 60);
+  /* Pastéis de apoio */
+  --blush: oklch(0.925 0.036 5);
+  --sky: oklch(0.925 0.036 235);
+
 
   --background: var(--nude);
   --foreground: var(--ink);
