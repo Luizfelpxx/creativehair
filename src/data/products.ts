@@ -142,7 +142,41 @@ export const PRODUCTS: Product[] = [
     },
     priceBySize: priceTable(1500, 190),
   },
+  {
+    id: "topper-capilar-loiro",
+    name: "Topper Capilar Loiro",
+    category: "Toppers / Topo de Cabelo",
+    description:
+      "Topper capilar ideal para proporcionar mais volume e cobertura na região superior da cabeça. Acabamento natural, confortável, prático e com resultado discreto e elegante.",
+    features: [
+      "Ideal para dar volume na parte superior da cabeça",
+      "Proporciona cobertura e aparência natural",
+      "Confortável e prático de utilizar",
+      "Pode ser personalizado conforme a necessidade da cliente",
+    ],
+    image: topperLoiroAsset.url,
+    alt: "Topper capilar loiro com acabamento natural da Creative Hair",
+    sizes: ["45cm", "50cm", "55cm", "60cm"],
+    colors: ["Loiro Iluminado"],
+    colorImages: {
+      "Loiro Iluminado": topperLoiroAsset.url,
+    },
+    priceBySize: priceTable(1100, 120),
+  },
 ];
+
+/** Produtos agrupados por categoria, na ordem de CATEGORIES. */
+export function productsByCategory() {
+  return CATEGORIES.map((category) => ({
+    category,
+    products: PRODUCTS.filter((product) => (product.category ?? "Mega Hair") === category),
+  })).filter((group) => group.products.length > 0);
+}
+
+/** Tamanhos disponíveis para o produto. */
+export function getSizes(product: Product): readonly Size[] {
+  return product.sizes ?? SIZES;
+}
 
 export function getPrice(product: Product, size: Size, color: string): number {
   return product.priceBySize[size] + (product.colorSurcharge?.[color] ?? 0);
