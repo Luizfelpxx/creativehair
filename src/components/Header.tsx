@@ -16,7 +16,7 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/85 backdrop-blur-md">
+    <header className="fixed top-0 z-50 w-full border-b border-blush/60 bg-gradient-to-r from-blush/40 via-background/85 to-sky/25 backdrop-blur-md">
       <div className="mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 md:px-6 lg:h-20 lg:py-0">
         <div className="hidden lg:flex lg:gap-8 lg:text-[11px] lg:font-medium lg:uppercase lg:tracking-[0.2em]">
           {LINKS.slice(0, 3).map((link) => (
