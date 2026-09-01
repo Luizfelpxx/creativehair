@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import {
   getPrice,
   getProductImage,
+  getSizes,
   getSizeScale,
-  SIZES,
   type Product,
   type Size,
 } from "@/data/products";
