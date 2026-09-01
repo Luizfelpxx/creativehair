@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import {
   getPrice,
   getProductImage,
+  getSizes,
   getSizeScale,
-  SIZES,
   type Product,
   type Size,
 } from "@/data/products";
@@ -125,6 +125,17 @@ export function ProductCard({ product }: { product: Product }) {
         <h3 className="font-serif text-xl">{product.name}</h3>
         <p className="text-xs leading-relaxed text-foreground/60">{product.description}</p>
 
+        {product.features && product.features.length > 0 && (
+          <ul className="space-y-1 pt-1">
+            {product.features.map((feature) => (
+              <li key={feature} className="flex gap-2 text-[11px] leading-relaxed text-foreground/55">
+                <span aria-hidden className="mt-[6px] size-1 shrink-0 rounded-full bg-accent" />
+                {feature}
+              </li>
+            ))}
+          </ul>
+        )}
+
         <div className="grid gap-3 pt-2 sm:grid-cols-2">
           <label className="block">
             <span className="mb-2 block text-[9px] font-bold uppercase tracking-widest text-accent">
@@ -136,7 +147,7 @@ export function ProductCard({ product }: { product: Product }) {
               className="w-full border border-border bg-transparent px-3 py-2 text-xs transition-colors focus:border-accent focus:outline-none"
             >
               <option value="">Selecionar</option>
-              {SIZES.map((option) => (
+              {getSizes(product).map((option) => (
                 <option key={option} value={option}>
                   {option} — {formatBRL(product.priceBySize[option])}
                 </option>
