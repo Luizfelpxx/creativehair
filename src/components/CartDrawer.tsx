@@ -1,4 +1,4 @@
-import { getSizes, PRODUCTS, type Size } from "@/data/products";
+import { getProductImage, getSizes, PRODUCTS, type Size } from "@/data/products";
 import { itemPrice, useCart } from "@/hooks/use-cart";
 import { formatBRL, openWhatsapp } from "@/lib/site-config";
 import { renderTemplate, useSettings } from "@/lib/settings";
@@ -56,7 +56,7 @@ export function CartDrawer() {
             return (
               <div key={`${item.productId}-${item.size}-${item.color}`} className="flex gap-4">
                 <img
-                  src={product.image}
+                  src={getProductImage(product, item.color)}
                   alt={product.alt}
                   loading="lazy"
                   width={80}

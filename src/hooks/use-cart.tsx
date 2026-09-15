@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { getPrice, PRODUCTS, type Size } from "@/data/products";
+import { getPrice, getSizes, PRODUCTS, type Size } from "@/data/products";
 import { useSettings, type HairPrices } from "@/lib/settings";
 
 export type CartItem = {
@@ -54,7 +54,10 @@ function readStoredCart(): CartItem[] {
     return parsed.filter((item) => {
       const product = PRODUCTS.find((p) => p.id === item.productId);
       return Boolean(
-        product && product.colors.includes(item.color) && item.size && item.quantity > 0,
+        product &&
+          product.colors.includes(item.color) &&
+          getSizes(product).includes(item.size) &&
+          item.quantity > 0,
       );
     });
   } catch {
