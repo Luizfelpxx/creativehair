@@ -170,7 +170,7 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
                       step="0.01"
                       value={values.hairPrices[size]}
                       onChange={(event) => updateHairPrice(size, event.target.value)}
-                      className="min-w-0 flex-1 bg-transparent px-2 py-2 text-xs outline-none"
+                      className="min-w-0 flex-1 bg-transparent px-2 py-2 text-xs text-foreground outline-none"
                     />
                   </span>
                 </label>

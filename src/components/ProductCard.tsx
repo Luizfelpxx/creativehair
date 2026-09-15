@@ -139,7 +139,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="grid gap-3 pt-2 sm:grid-cols-2">
           <label className="block">
             <span className="mb-2 block text-[9px] font-bold uppercase tracking-widest text-accent">
-              Tamanho
+              Tamanho · 100g
             </span>
             <select
               value={size}
