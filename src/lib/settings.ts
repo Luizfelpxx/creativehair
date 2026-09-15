@@ -4,6 +4,19 @@
  */
 import { useSyncExternalStore } from "react";
 
+export const HAIR_PRICE_SIZES = ["45cm", "55cm", "60cm", "65cm", "70cm", "75cm"] as const;
+export type HairPriceSize = (typeof HAIR_PRICE_SIZES)[number];
+export type HairPrices = Record<HairPriceSize, number>;
+
+export const REAL_HAIR_PRICES: HairPrices = {
+  "45cm": 422,
+  "55cm": 624.8,
+  "60cm": 716,
+  "65cm": 797.2,
+  "70cm": 878.4,
+  "75cm": 979.8,
+};
+
 export type SiteSettings = {
   whatsappNumber: string;
   contactEmail: string;
@@ -15,6 +28,8 @@ export type SiteSettings = {
   serviceTemplate: string;
   /** Placeholders: {itens} {total} */
   checkoutTemplate: string;
+  /** Preços reais de 100g dos cabelos, por comprimento. */
+  hairPrices: HairPrices;
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -28,6 +43,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     "Olá! Gostaria de solicitar um orçamento para o serviço de {servico} da Creative Hair.",
   checkoutTemplate:
     "Olá! Gostaria de finalizar meu pedido na Creative Hair:\n{itens}\nTotal: {total}\nVocês aceitam Pix? Podem confirmar disponibilidade e prazo de entrega?",
+  hairPrices: REAL_HAIR_PRICES,
 };
 
 const STORAGE_KEY = "creative-hair:settings";
@@ -41,7 +57,12 @@ function readStorage(): SiteSettings {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_SETTINGS;
-    return { ...DEFAULT_SETTINGS, ...(JSON.parse(raw) as Partial<SiteSettings>) };
+    const saved = JSON.parse(raw) as Partial<SiteSettings>;
+    return {
+      ...DEFAULT_SETTINGS,
+      ...saved,
+      hairPrices: { ...REAL_HAIR_PRICES, ...saved.hairPrices },
+    };
   } catch {
     return DEFAULT_SETTINGS;
   }

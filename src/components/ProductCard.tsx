@@ -74,7 +74,7 @@ export function ProductCard({ product }: { product: Product }) {
   const [color, setColor] = useState("");
   const [error, setError] = useState("");
 
-  const price = size && color ? getPrice(product, size, color) : null;
+  const price = size && color ? getPrice(product, size, color, settings.hairPrices) : null;
   const image = getProductImage(product, color);
   const scale = getSizeScale(size);
 
@@ -139,7 +139,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="grid gap-3 pt-2 sm:grid-cols-2">
           <label className="block">
             <span className="mb-2 block text-[9px] font-bold uppercase tracking-widest text-accent">
-              Tamanho
+              Tamanho · 100g
             </span>
             <select
               value={size}
@@ -149,7 +149,7 @@ export function ProductCard({ product }: { product: Product }) {
               <option value="">Selecionar</option>
               {getSizes(product).map((option) => (
                 <option key={option} value={option}>
-                  {option} — {formatBRL(product.priceBySize[option])}
+                  {option} — {formatBRL(getPrice(product, option, color, settings.hairPrices))}
                 </option>
               ))}
             </select>

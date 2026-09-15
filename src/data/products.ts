@@ -1,21 +1,9 @@
-import castanho from "@/assets/produto-castanho.jpg";
-import loiroMesclado from "@/assets/produto-loiro-mesclado.jpg";
-import loiroEscuro from "@/assets/produto-loiro-escuro.jpg";
-import morenoIluminado from "@/assets/produto-moreno-iluminado.jpg";
-import cacheado from "@/assets/produto-cacheado.jpg";
-import corCastanhoNatural from "@/assets/cor-castanho-natural.jpg";
-import corCastanhoEscuro from "@/assets/cor-castanho-escuro.jpg";
-import corCastanhoMedio from "@/assets/cor-castanho-medio.jpg";
-import corLoiroPerola from "@/assets/cor-loiro-perola.jpg";
-import corLoiroMel from "@/assets/cor-loiro-mel.jpg";
-import corLoiroBege from "@/assets/cor-loiro-bege.jpg";
-import corLoiroEscuro from "@/assets/cor-loiro-escuro.jpg";
-import corLoiroAcinzentado from "@/assets/cor-loiro-acinzentado.jpg";
-import corMorenoIluminado from "@/assets/cor-moreno-iluminado.jpg";
-import corMorenoCaramelo from "@/assets/cor-moreno-caramelo.jpg";
-import corCacheadoPreto from "@/assets/cor-cacheado-preto.jpg";
-import corCacheadoCastanhoEscuro from "@/assets/cor-cacheado-castanho-escuro.jpg";
+import pretoOnduladoAsset from "@/assets/cabelo-preto-ondulado.jpeg.asset.json";
+import castanhoCacheadoAsset from "@/assets/cabelo-castanho-cacheado.jpeg.asset.json";
+import pretoLisoAsset from "@/assets/cabelo-preto-liso.jpeg.asset.json";
+import morenoIluminadoAsset from "@/assets/cabelo-moreno-iluminado-ondulado.jpeg.asset.json";
 import topperLoiroAsset from "@/assets/topper-capilar-loiro.jpg.asset.json";
+import { REAL_HAIR_PRICES, type HairPrices } from "@/lib/settings";
 
 /** Tamanhos disponíveis (cm). */
 export const SIZES = [
@@ -30,6 +18,8 @@ export const SIZES = [
   "85cm",
   "90cm",
 ] as const;
+
+export const HAIR_SIZES = ["45cm", "55cm", "60cm", "65cm", "70cm", "75cm"] as const;
 
 export type Size = (typeof SIZES)[number];
 
@@ -56,7 +46,9 @@ export type Product = {
    * PREÇOS PROVISÓRIOS — substitua pelos valores da tabela oficial.
    * Preço por tamanho (em reais).
    */
-  priceBySize: Record<Size, number>;
+  priceBySize: Partial<Record<Size, number>>;
+  /** Usa a tabela editável de 100g no painel. */
+  usesHairPriceTable?: boolean;
   /** Foto por cor — exibida no card quando a cliente seleciona a tonalidade. */
   colorImages: Record<string, string>;
   /** Acréscimo opcional por cor (em reais). Deixe 0 quando não houver. */
@@ -76,71 +68,61 @@ function priceTable(base: number, step: number): Record<Size, number> {
 
 export const PRODUCTS: Product[] = [
   {
-    id: "castanho",
-    name: "Cabelo Brasileiro Castanho",
-    description: "Fios inteiros, sedosos e com brilho natural preservado.",
-    image: castanho,
-    alt: "Mecha de cabelo brasileiro castanho liso premium da Creative Hair",
-    colors: ["Castanho Natural", "Castanho Escuro", "Castanho Médio"],
+    id: "preto-ondulado",
+    name: "Cabelo Brasileiro Preto Ondulado",
+    description: "Ondas naturais, fios inteiros e brilho intenso preservado.",
+    image: pretoOnduladoAsset.url,
+    alt: "Duas mechas de cabelo brasileiro preto ondulado da Creative Hair",
+    sizes: HAIR_SIZES,
+    colors: ["Preto Natural"],
     colorImages: {
-      "Castanho Natural": corCastanhoNatural,
-      "Castanho Escuro": corCastanhoEscuro,
-      "Castanho Médio": corCastanhoMedio,
+      "Preto Natural": pretoOnduladoAsset.url,
     },
-    priceBySize: priceTable(1200, 150),
+    priceBySize: REAL_HAIR_PRICES,
+    usesHairPriceTable: true,
   },
   {
-    id: "loiro-mesclado",
-    name: "Cabelo Brasileiro Loiro Mesclado",
-    description: "Mescla perfeita de tons para um efeito iluminado natural.",
-    image: loiroMesclado,
-    alt: "Mecha de cabelo brasileiro loiro mesclado premium da Creative Hair",
-    colors: ["Loiro Pérola", "Loiro Mel", "Loiro Bege"],
+    id: "castanho-cacheado",
+    name: "Cabelo Brasileiro Castanho Cacheado",
+    description: "Cachos definidos, volumosos e com movimento natural.",
+    image: castanhoCacheadoAsset.url,
+    alt: "Mecha de cabelo brasileiro castanho cacheado da Creative Hair",
+    sizes: HAIR_SIZES,
+    colors: ["Castanho Escuro"],
     colorImages: {
-      "Loiro Pérola": corLoiroPerola,
-      "Loiro Mel": corLoiroMel,
-      "Loiro Bege": corLoiroBege,
+      "Castanho Escuro": castanhoCacheadoAsset.url,
     },
-    priceBySize: priceTable(1450, 180),
+    priceBySize: REAL_HAIR_PRICES,
+    usesHairPriceTable: true,
   },
   {
-    id: "loiro-escuro",
-    name: "Cabelo Brasileiro Loiro Escuro",
-    description: "Tonalidade amanteigada e discreta, de acabamento uniforme.",
-    image: loiroEscuro,
-    alt: "Mecha de cabelo brasileiro loiro escuro premium da Creative Hair",
-    colors: ["Loiro Escuro", "Loiro Acinzentado"],
+    id: "preto-liso",
+    name: "Cabelo Brasileiro Preto Liso",
+    description: "Fios lisos, alinhados, sedosos e com aparência natural.",
+    image: pretoLisoAsset.url,
+    alt: "Mecha de cabelo brasileiro preto liso da Creative Hair",
+    sizes: HAIR_SIZES,
+    colors: ["Preto Natural"],
     colorImages: {
-      "Loiro Escuro": corLoiroEscuro,
-      "Loiro Acinzentado": corLoiroAcinzentado,
+      "Preto Natural": pretoLisoAsset.url,
     },
-    priceBySize: priceTable(1400, 170),
+    priceBySize: REAL_HAIR_PRICES,
+    usesHairPriceTable: true,
   },
   {
-    id: "moreno-iluminado",
-    name: "Cabelo Brasileiro Moreno Iluminado",
-    description: "Base escura com reflexos caramelo para um brilho vivo.",
-    image: morenoIluminado,
-    alt: "Mecha de cabelo brasileiro moreno iluminado premium da Creative Hair",
+    id: "moreno-iluminado-ondulado",
+    name: "Cabelo Brasileiro Moreno Iluminado Ondulado",
+    description: "Base castanha com pontas iluminadas e ondas marcantes.",
+    image: morenoIluminadoAsset.url,
+    alt: "Mecha de cabelo brasileiro moreno iluminado ondulado da Creative Hair",
+    sizes: HAIR_SIZES,
     colors: ["Moreno Iluminado", "Moreno Caramelo"],
     colorImages: {
-      "Moreno Iluminado": corMorenoIluminado,
-      "Moreno Caramelo": corMorenoCaramelo,
+      "Moreno Iluminado": morenoIluminadoAsset.url,
+      "Moreno Caramelo": morenoIluminadoAsset.url,
     },
-    priceBySize: priceTable(1350, 165),
-  },
-  {
-    id: "cacheado",
-    name: "Cabelo Brasileiro Cacheado",
-    description: "Cachos definidos e volumosos, 100% natural e sem química.",
-    image: cacheado,
-    alt: "Mecha de cabelo brasileiro cacheado premium da Creative Hair",
-    colors: ["Preto Natural", "Castanho Escuro"],
-    colorImages: {
-      "Preto Natural": corCacheadoPreto,
-      "Castanho Escuro": corCacheadoCastanhoEscuro,
-    },
-    priceBySize: priceTable(1500, 190),
+    priceBySize: REAL_HAIR_PRICES,
+    usesHairPriceTable: true,
   },
   {
     id: "topper-capilar-loiro",
@@ -178,8 +160,14 @@ export function getSizes(product: Product): readonly Size[] {
   return product.sizes ?? SIZES;
 }
 
-export function getPrice(product: Product, size: Size, color: string): number {
-  return product.priceBySize[size] + (product.colorSurcharge?.[color] ?? 0);
+export function getPrice(
+  product: Product,
+  size: Size,
+  color: string,
+  hairPrices?: HairPrices,
+): number {
+  const table = product.usesHairPriceTable ? (hairPrices ?? REAL_HAIR_PRICES) : product.priceBySize;
+  return (table[size as keyof typeof table] ?? 0) + (product.colorSurcharge?.[color] ?? 0);
 }
 
 /** Foto correspondente à cor selecionada (cai na foto principal se não houver). */

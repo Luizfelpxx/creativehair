@@ -1,4 +1,4 @@
-import { PRODUCTS, SIZES, type Size } from "@/data/products";
+import { getProductImage, getSizes, PRODUCTS, type Size } from "@/data/products";
 import { itemPrice, useCart } from "@/hooks/use-cart";
 import { formatBRL, openWhatsapp } from "@/lib/site-config";
 import { renderTemplate, useSettings } from "@/lib/settings";
@@ -14,7 +14,7 @@ export function CartDrawer() {
     .map((item) => {
       const product = PRODUCTS.find((p) => p.id === item.productId);
       return `- ${product?.name ?? item.productId}, ${item.size}, ${item.color} x${item.quantity} - ${formatBRL(
-        itemPrice(item) * item.quantity,
+        itemPrice(item, settings.hairPrices) * item.quantity,
       )}`;
     })
     .join("\n");
@@ -56,7 +56,7 @@ export function CartDrawer() {
             return (
               <div key={`${item.productId}-${item.size}-${item.color}`} className="flex gap-4">
                 <img
-                  src={product.image}
+                  src={getProductImage(product, item.color)}
                   alt={product.alt}
                   loading="lazy"
                   width={80}
@@ -66,7 +66,9 @@ export function CartDrawer() {
                 <div className="min-w-0 flex-1 space-y-2">
                   <div className="flex justify-between gap-2 font-serif text-base">
                     <span className="min-w-0">{product.name}</span>
-                    <span className="shrink-0">{formatBRL(itemPrice(item) * item.quantity)}</span>
+                    <span className="shrink-0">
+                      {formatBRL(itemPrice(item, settings.hairPrices) * item.quantity)}
+                    </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
@@ -76,7 +78,7 @@ export function CartDrawer() {
                       onChange={(event) => cart.updateSize(index, event.target.value as Size)}
                       className="border border-border bg-transparent px-2 py-1 text-[11px]"
                     >
-                      {SIZES.map((size) => (
+                      {getSizes(product).map((size) => (
                         <option key={size} value={size}>
                           {size}
                         </option>

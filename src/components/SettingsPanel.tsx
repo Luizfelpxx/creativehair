@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import {
   DEFAULT_SETTINGS,
+  HAIR_PRICE_SIZES,
   getSettings,
   resetSettings,
   saveSettings,
+  type HairPriceSize,
   type SiteSettings,
 } from "@/lib/settings";
 
 const FIELDS: {
-  key: keyof SiteSettings;
+  key: Exclude<keyof SiteSettings, "hairPrices">;
   label: string;
   hint?: string;
   multiline?: boolean;
@@ -83,6 +85,14 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
     setSaved(true);
   }
 
+  function updateHairPrice(size: HairPriceSize, value: string) {
+    const price = Number(value.replace(",", "."));
+    setValues((current) => ({
+      ...current,
+      hairPrices: { ...current.hairPrices, [size]: Number.isFinite(price) ? price : 0 },
+    }));
+  }
+
   return (
     <div className="fixed inset-0 z-100 flex items-end justify-center sm:items-center">
       <button
@@ -138,6 +148,35 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
               )}
             </label>
           ))}
+
+          <fieldset className="border-t border-border pt-5">
+            <legend className="mb-2 text-[9px] font-bold uppercase tracking-widest text-accent">
+              Preços dos cabelos — 100g
+            </legend>
+            <p className="mb-4 text-[10px] leading-relaxed text-foreground/45">
+              Valores por comprimento aplicados aos produtos de mega hair.
+            </p>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {HAIR_PRICE_SIZES.map((size) => (
+                <label key={size} className="block">
+                  <span className="mb-1 block text-[9px] font-bold uppercase tracking-widest text-foreground/55">
+                    {size}
+                  </span>
+                  <span className="flex items-center border border-border px-3 focus-within:border-accent">
+                    <span className="text-xs text-foreground/50">R$</span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={values.hairPrices[size]}
+                      onChange={(event) => updateHairPrice(size, event.target.value)}
+                      className="min-w-0 flex-1 bg-transparent px-2 py-2 text-xs text-foreground outline-none"
+                    />
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </div>
 
         {error && (
