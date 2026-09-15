@@ -74,7 +74,7 @@ export function ProductCard({ product }: { product: Product }) {
   const [color, setColor] = useState("");
   const [error, setError] = useState("");
 
-  const price = size && color ? getPrice(product, size, color) : null;
+  const price = size && color ? getPrice(product, size, color, settings.hairPrices) : null;
   const image = getProductImage(product, color);
   const scale = getSizeScale(size);
 

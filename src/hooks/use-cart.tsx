@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { getPrice, PRODUCTS, type Size } from "@/data/products";
+import { useSettings, type HairPrices } from "@/lib/settings";
 
 export type CartItem = {
   productId: string;
@@ -34,10 +35,10 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 const key = (item: CartItem) => `${item.productId}|${item.size}|${item.color}`;
 
-export function itemPrice(item: CartItem): number {
+export function itemPrice(item: CartItem, hairPrices?: HairPrices): number {
   const product = PRODUCTS.find((p) => p.id === item.productId);
   if (!product) return 0;
-  return getPrice(product, item.size, item.color);
+  return getPrice(product, item.size, item.color, hairPrices);
 }
 
 const STORAGE_KEY = "creative-hair:cart";
@@ -62,6 +63,7 @@ function readStoredCart(): CartItem[] {
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const settings = useSettings();
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -97,7 +99,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<CartContextValue>(() => {
-    const subtotal = items.reduce((total, item) => total + itemPrice(item) * item.quantity, 0);
+    const subtotal = items.reduce(
+      (total, item) => total + itemPrice(item, settings.hairPrices) * item.quantity,
+      0,
+    );
     return {
       items,
       count: items.reduce((total, item) => total + item.quantity, 0),
@@ -114,7 +119,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       updateSize: (index, size) => patch(index, { size }),
       updateColor: (index, color) => patch(index, { color }),
     };
-  }, [items, isOpen, add, patch]);
+  }, [items, isOpen, add, patch, settings.hairPrices]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
