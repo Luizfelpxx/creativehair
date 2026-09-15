@@ -3,7 +3,7 @@ import { openWhatsapp } from "@/lib/site-config";
 import { renderTemplate, selectionDetails, useSettings } from "@/lib/settings";
 import { CopyMessageButton } from "./CopyMessageButton";
 import { useReveal } from "@/hooks/use-reveal";
-import { PRODUCTS, SIZES, type Product, type Size } from "@/data/products";
+import { getSizes, PRODUCTS, type Size } from "@/data/products";
 
 export function Wholesale() {
   const reveal = useReveal<HTMLDivElement>();
@@ -66,7 +66,7 @@ export function Wholesale() {
                 className="w-full border border-border bg-transparent px-3 py-2 text-xs transition-colors focus:border-accent focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <option value="">Selecionar (opcional)</option>
-                {SIZES.map((option) => (
+                {(product ? getSizes(product) : []).map((option) => (
                   <option key={option} value={option}>
                     {option}
                   </option>

@@ -149,7 +149,7 @@ export function ProductCard({ product }: { product: Product }) {
               <option value="">Selecionar</option>
               {getSizes(product).map((option) => (
                 <option key={option} value={option}>
-                  {option} — {formatBRL(product.priceBySize[option])}
+                  {option} — {formatBRL(getPrice(product, option, color, settings.hairPrices))}
                 </option>
               ))}
             </select>
