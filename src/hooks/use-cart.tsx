@@ -8,12 +8,13 @@ import {
   type ReactNode,
 } from "react";
 import { getPrice, getSizes, PRODUCTS, type Size } from "@/data/products";
-import { useSettings, type HairPrices } from "@/lib/settings";
+import { useSettings, type HairPrices, type HairWeight } from "@/lib/settings";
 
 export type CartItem = {
   productId: string;
   size: Size;
   color: string;
+  weight?: HairWeight;
   quantity: number;
 };
 
@@ -29,16 +30,21 @@ type CartContextValue = {
   updateQuantity: (index: number, quantity: number) => void;
   updateSize: (index: number, size: Size) => void;
   updateColor: (index: number, color: string) => void;
+  updateWeight: (index: number, weight: HairWeight) => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-const key = (item: CartItem) => `${item.productId}|${item.size}|${item.color}`;
+const key = (item: CartItem) => `${item.productId}|${item.size}|${item.color}|${item.weight ?? ""}`;
 
-export function itemPrice(item: CartItem, hairPrices?: HairPrices): number {
+export function itemPrice(
+  item: CartItem,
+  hairPrices?: HairPrices,
+  hairPrices500g?: HairPrices,
+): number {
   const product = PRODUCTS.find((p) => p.id === item.productId);
   if (!product) return 0;
-  return getPrice(product, item.size, item.color, hairPrices);
+  return getPrice(product, item.size, item.color, hairPrices, item.weight, hairPrices500g);
 }
 
 const STORAGE_KEY = "creative-hair:cart";
@@ -59,6 +65,9 @@ function readStoredCart(): CartItem[] {
           getSizes(product).includes(item.size) &&
           item.quantity > 0,
       );
+    }).map((item) => {
+      const product = PRODUCTS.find((p) => p.id === item.productId);
+      return product?.usesHairPriceTable && !item.weight ? { ...item, weight: "100g" as const } : item;
     });
   } catch {
     return [];
@@ -103,7 +112,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<CartContextValue>(() => {
     const subtotal = items.reduce(
-      (total, item) => total + itemPrice(item, settings.hairPrices) * item.quantity,
+      (total, item) =>
+        total + itemPrice(item, settings.hairPrices, settings.hairPrices500g) * item.quantity,
       0,
     );
     return {
@@ -121,8 +131,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
           : patch(index, { quantity }),
       updateSize: (index, size) => patch(index, { size }),
       updateColor: (index, color) => patch(index, { color }),
+      updateWeight: (index, weight) => patch(index, { weight }),
     };
-  }, [items, isOpen, add, patch, settings.hairPrices]);
+  }, [items, isOpen, add, patch, settings.hairPrices, settings.hairPrices500g]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

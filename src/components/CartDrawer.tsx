@@ -2,6 +2,7 @@ import { getProductImage, getSizes, PRODUCTS, type Size } from "@/data/products"
 import { itemPrice, useCart } from "@/hooks/use-cart";
 import { formatBRL, openWhatsapp } from "@/lib/site-config";
 import { renderTemplate, useSettings } from "@/lib/settings";
+import type { HairWeight } from "@/lib/settings";
 import { CopyMessageButton } from "./CopyMessageButton";
 
 export function CartDrawer() {
@@ -13,8 +14,9 @@ export function CartDrawer() {
   const itens = cart.items
     .map((item) => {
       const product = PRODUCTS.find((p) => p.id === item.productId);
-      return `- ${product?.name ?? item.productId}, ${item.size}, ${item.color} x${item.quantity} - ${formatBRL(
-        itemPrice(item, settings.hairPrices) * item.quantity,
+      const gramatura = item.weight ? `, ${item.weight}` : "";
+      return `- ${product?.name ?? item.productId}, ${item.size}${gramatura}, ${item.color} x${item.quantity} - ${formatBRL(
+        itemPrice(item, settings.hairPrices, settings.hairPrices500g) * item.quantity,
       )}`;
     })
     .join("\n");
@@ -54,7 +56,7 @@ export function CartDrawer() {
             const product = PRODUCTS.find((p) => p.id === item.productId);
             if (!product) return null;
             return (
-              <div key={`${item.productId}-${item.size}-${item.color}`} className="flex gap-4">
+              <div key={`${item.productId}-${item.size}-${item.color}-${item.weight ?? ""}`} className="flex gap-4">
                 <img
                   src={getProductImage(product, item.color)}
                   alt={product.alt}
@@ -67,7 +69,9 @@ export function CartDrawer() {
                   <div className="flex justify-between gap-2 font-serif text-base">
                     <span className="min-w-0">{product.name}</span>
                     <span className="shrink-0">
-                      {formatBRL(itemPrice(item, settings.hairPrices) * item.quantity)}
+                      {formatBRL(
+                        itemPrice(item, settings.hairPrices, settings.hairPrices500g) * item.quantity,
+                      )}
                     </span>
                   </div>
 
@@ -97,6 +101,23 @@ export function CartDrawer() {
                       ))}
                     </select>
                   </div>
+
+                  {item.weight && (
+                    <label className="block">
+                      <span className="sr-only">Gramatura</span>
+                      <select
+                        aria-label="Gramatura"
+                        value={item.weight}
+                        onChange={(event) =>
+                          cart.updateWeight(index, event.target.value as HairWeight)
+                        }
+                        className="w-full border border-border bg-transparent px-2 py-1 text-[11px]"
+                      >
+                        <option value="100g">100g</option>
+                        <option value="500g">500g</option>
+                      </select>
+                    </label>
+                  )}
 
                   <div className="flex items-center justify-between pt-1">
                     <div className="flex border border-border">
