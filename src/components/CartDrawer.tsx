@@ -2,6 +2,7 @@ import { getProductImage, getSizes, PRODUCTS, type Size } from "@/data/products"
 import { itemPrice, useCart } from "@/hooks/use-cart";
 import { formatBRL, openWhatsapp } from "@/lib/site-config";
 import { renderTemplate, useSettings } from "@/lib/settings";
+import type { HairWeight } from "@/lib/settings";
 import { CopyMessageButton } from "./CopyMessageButton";
 
 export function CartDrawer() {
@@ -55,7 +56,7 @@ export function CartDrawer() {
             const product = PRODUCTS.find((p) => p.id === item.productId);
             if (!product) return null;
             return (
-              <div key={`${item.productId}-${item.size}-${item.color}`} className="flex gap-4">
+              <div key={`${item.productId}-${item.size}-${item.color}-${item.weight ?? ""}`} className="flex gap-4">
                 <img
                   src={getProductImage(product, item.color)}
                   alt={product.alt}
@@ -102,9 +103,20 @@ export function CartDrawer() {
                   </div>
 
                   {item.weight && (
-                    <p className="text-[10px] font-semibold uppercase tracking-widest text-accent">
-                      Gramatura: {item.weight}
-                    </p>
+                    <label className="block">
+                      <span className="sr-only">Gramatura</span>
+                      <select
+                        aria-label="Gramatura"
+                        value={item.weight}
+                        onChange={(event) =>
+                          cart.updateWeight(index, event.target.value as HairWeight)
+                        }
+                        className="w-full border border-border bg-transparent px-2 py-1 text-[11px]"
+                      >
+                        <option value="100g">100g</option>
+                        <option value="500g">500g</option>
+                      </select>
+                    </label>
                   )}
 
                   <div className="flex items-center justify-between pt-1">

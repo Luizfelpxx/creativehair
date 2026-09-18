@@ -106,13 +106,11 @@ export function ProductCard({ product }: { product: Product }) {
       return;
     }
     setError("");
-    add({
-      productId: product.id,
-      size,
-      color,
-      weight: product.usesHairPriceTable ? weight : undefined,
-      quantity: 1,
-    });
+    add(
+      product.usesHairPriceTable
+        ? { productId: product.id, size, color, weight, quantity: 1 }
+        : { productId: product.id, size, color, quantity: 1 },
+    );
   }
 
   return (

@@ -30,6 +30,7 @@ type CartContextValue = {
   updateQuantity: (index: number, quantity: number) => void;
   updateSize: (index: number, size: Size) => void;
   updateColor: (index: number, color: string) => void;
+  updateWeight: (index: number, weight: HairWeight) => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -130,6 +131,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           : patch(index, { quantity }),
       updateSize: (index, size) => patch(index, { size }),
       updateColor: (index, color) => patch(index, { color }),
+      updateWeight: (index, weight) => patch(index, { weight }),
     };
   }, [items, isOpen, add, patch, settings.hairPrices, settings.hairPrices500g]);
 

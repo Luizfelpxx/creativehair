@@ -171,7 +171,7 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
                       min="0"
                       step="0.01"
                       value={values.hairPrices[size]}
-                      onChange={(event) => updateHairPrice(size, event.target.value)}
+                      onChange={(event) => updateHairPrice(size, event.target.value, "hairPrices")}
                       className="min-w-0 flex-1 bg-transparent px-2 py-2 text-xs text-foreground outline-none"
                     />
                   </span>
@@ -225,12 +225,12 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
           <button
             type="button"
             onClick={() => {
-               resetSettings();
-               setValues({
-                 ...DEFAULT_SETTINGS,
-                 hairPrices: REAL_HAIR_PRICES,
-                 hairPrices500g: REAL_HAIR_PRICES_500G,
-               });
+              resetSettings();
+              setValues({
+                ...DEFAULT_SETTINGS,
+                hairPrices: REAL_HAIR_PRICES,
+                hairPrices500g: REAL_HAIR_PRICES_500G,
+              });
               setError("");
             }}
             className="border border-border py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors hover:bg-secondary"
