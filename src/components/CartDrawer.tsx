@@ -13,8 +13,9 @@ export function CartDrawer() {
   const itens = cart.items
     .map((item) => {
       const product = PRODUCTS.find((p) => p.id === item.productId);
-      return `- ${product?.name ?? item.productId}, ${item.size}, ${item.color} x${item.quantity} - ${formatBRL(
-        itemPrice(item, settings.hairPrices) * item.quantity,
+      const gramatura = item.weight ? `, ${item.weight}` : "";
+      return `- ${product?.name ?? item.productId}, ${item.size}${gramatura}, ${item.color} x${item.quantity} - ${formatBRL(
+        itemPrice(item, settings.hairPrices, settings.hairPrices500g) * item.quantity,
       )}`;
     })
     .join("\n");
@@ -67,7 +68,9 @@ export function CartDrawer() {
                   <div className="flex justify-between gap-2 font-serif text-base">
                     <span className="min-w-0">{product.name}</span>
                     <span className="shrink-0">
-                      {formatBRL(itemPrice(item, settings.hairPrices) * item.quantity)}
+                      {formatBRL(
+                        itemPrice(item, settings.hairPrices, settings.hairPrices500g) * item.quantity,
+                      )}
                     </span>
                   </div>
 
@@ -97,6 +100,12 @@ export function CartDrawer() {
                       ))}
                     </select>
                   </div>
+
+                  {item.weight && (
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-accent">
+                      Gramatura: {item.weight}
+                    </p>
+                  )}
 
                   <div className="flex items-center justify-between pt-1">
                     <div className="flex border border-border">

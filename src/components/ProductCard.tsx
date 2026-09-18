@@ -8,7 +8,12 @@ import {
   type Size,
 } from "@/data/products";
 import { formatBRL, openWhatsapp } from "@/lib/site-config";
-import { renderTemplate, selectionDetails, useSettings } from "@/lib/settings";
+import {
+  renderTemplate,
+  selectionDetails,
+  useSettings,
+  type HairWeight,
+} from "@/lib/settings";
 import { CopyMessageButton } from "./CopyMessageButton";
 import { useCart } from "@/hooks/use-cart";
 import { useReveal } from "@/hooks/use-reveal";
@@ -72,13 +77,20 @@ export function ProductCard({ product }: { product: Product }) {
   const reveal = useReveal<HTMLElement>();
   const [size, setSize] = useState<Size | "">("");
   const [color, setColor] = useState("");
+  const [weight, setWeight] = useState<HairWeight>("100g");
   const [error, setError] = useState("");
 
-  const price = size && color ? getPrice(product, size, color, settings.hairPrices) : null;
+  const price = size && color
+    ? getPrice(product, size, color, settings.hairPrices, weight, settings.hairPrices500g)
+    : null;
   const image = getProductImage(product, color);
   const scale = getSizeScale(size);
 
-  const detalhes = selectionDetails(size || undefined, color || undefined);
+  const detalhes = selectionDetails(
+    size || undefined,
+    color || undefined,
+    product.usesHairPriceTable ? weight : undefined,
+  );
   const perguntaMensagem = renderTemplate(settings.productTemplate, {
     produto: product.name,
     detalhes,
@@ -94,7 +106,13 @@ export function ProductCard({ product }: { product: Product }) {
       return;
     }
     setError("");
-    add({ productId: product.id, size, color, quantity: 1 });
+    add({
+      productId: product.id,
+      size,
+      color,
+      weight: product.usesHairPriceTable ? weight : undefined,
+      quantity: 1,
+    });
   }
 
   return (
@@ -136,10 +154,25 @@ export function ProductCard({ product }: { product: Product }) {
           </ul>
         )}
 
-        <div className="grid gap-3 pt-2 sm:grid-cols-2">
+        <div className={`grid gap-3 pt-2 ${product.usesHairPriceTable ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
+          {product.usesHairPriceTable && (
+            <label className="block">
+              <span className="mb-2 block text-[9px] font-bold uppercase tracking-widest text-accent">
+                Gramatura
+              </span>
+              <select
+                value={weight}
+                onChange={(event) => setWeight(event.target.value as HairWeight)}
+                className="w-full border border-border bg-transparent px-3 py-2 text-xs transition-colors focus:border-accent focus:outline-none"
+              >
+                <option value="100g">100g</option>
+                <option value="500g">500g</option>
+              </select>
+            </label>
+          )}
           <label className="block">
             <span className="mb-2 block text-[9px] font-bold uppercase tracking-widest text-accent">
-              Tamanho · 100g
+              Tamanho
             </span>
             <select
               value={size}
@@ -149,7 +182,14 @@ export function ProductCard({ product }: { product: Product }) {
               <option value="">Selecionar</option>
               {getSizes(product).map((option) => (
                 <option key={option} value={option}>
-                  {option} — {formatBRL(getPrice(product, option, color, settings.hairPrices))}
+                  {option} — {formatBRL(getPrice(
+                    product,
+                    option,
+                    color,
+                    settings.hairPrices,
+                    weight,
+                    settings.hairPrices500g,
+                  ))}
                 </option>
               ))}
             </select>

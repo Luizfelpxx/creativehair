@@ -3,7 +3,12 @@ import castanhoCacheadoAsset from "@/assets/cabelo-castanho-cacheado.jpeg.asset.
 import pretoLisoAsset from "@/assets/cabelo-preto-liso.jpeg.asset.json";
 import morenoIluminadoAsset from "@/assets/cabelo-moreno-iluminado-ondulado.jpeg.asset.json";
 import topperLoiroAsset from "@/assets/topper-capilar-loiro.jpg.asset.json";
-import { REAL_HAIR_PRICES, type HairPrices } from "@/lib/settings";
+import {
+  REAL_HAIR_PRICES,
+  REAL_HAIR_PRICES_500G,
+  type HairPrices,
+  type HairWeight,
+} from "@/lib/settings";
 
 /** Tamanhos disponíveis (cm). */
 export const SIZES = [
@@ -165,8 +170,14 @@ export function getPrice(
   size: Size,
   color: string,
   hairPrices?: HairPrices,
+  weight: HairWeight = "100g",
+  hairPrices500g?: HairPrices,
 ): number {
-  const table = product.usesHairPriceTable ? (hairPrices ?? REAL_HAIR_PRICES) : product.priceBySize;
+  const table = product.usesHairPriceTable
+    ? weight === "500g"
+      ? (hairPrices500g ?? REAL_HAIR_PRICES_500G)
+      : (hairPrices ?? REAL_HAIR_PRICES)
+    : product.priceBySize;
   return (table[size as keyof typeof table] ?? 0) + (product.colorSurcharge?.[color] ?? 0);
 }
 
