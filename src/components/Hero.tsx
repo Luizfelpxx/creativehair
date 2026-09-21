@@ -19,6 +19,7 @@ export function Hero() {
   const [isFocused, setIsFocused] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [manualAnnouncement, setManualAnnouncement] = useState("");
   const dragStart = useRef<number | null>(null);
   const resumeTimer = useRef<number | null>(null);
   const isPaused = isHovered || isFocused || isInteracting || reducedMotion;
@@ -43,8 +44,10 @@ export function Hero() {
     return () => window.clearInterval(timer);
   }, [isPaused]);
 
-  const showSlide = (index: number) => {
-    setActiveIndex((index + catalog.length) % catalog.length);
+  const showSlide = (index: number, announce = false) => {
+    const nextIndex = (index + catalog.length) % catalog.length;
+    setActiveIndex(nextIndex);
+    if (announce) setManualAnnouncement(`Foto ${nextIndex + 1} de ${catalog.length}: ${catalog[nextIndex]?.label}`);
   };
 
   const pauseBriefly = () => {
@@ -54,10 +57,10 @@ export function Hero() {
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "ArrowLeft") showSlide(activeIndex - 1);
-    else if (event.key === "ArrowRight") showSlide(activeIndex + 1);
-    else if (event.key === "Home") showSlide(0);
-    else if (event.key === "End") showSlide(catalog.length - 1);
+    if (event.key === "ArrowLeft") showSlide(activeIndex - 1, true);
+    else if (event.key === "ArrowRight") showSlide(activeIndex + 1, true);
+    else if (event.key === "Home") showSlide(0, true);
+    else if (event.key === "End") showSlide(catalog.length - 1, true);
     else return;
     event.preventDefault();
     pauseBriefly();
@@ -72,7 +75,7 @@ export function Hero() {
   const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
     if (dragStart.current !== null) {
       const distance = event.clientX - dragStart.current;
-      if (Math.abs(distance) > 45) showSlide(activeIndex + (distance < 0 ? 1 : -1));
+      if (Math.abs(distance) > 45) showSlide(activeIndex + (distance < 0 ? 1 : -1), true);
     }
     dragStart.current = null;
     pauseBriefly();
@@ -162,7 +165,7 @@ export function Hero() {
               variant="ghost"
               size="icon"
               className="border border-primary-foreground/30 bg-primary/20 text-primary-foreground backdrop-blur-sm hover:bg-primary-foreground hover:text-primary"
-              onClick={() => { showSlide(activeIndex - 1); pauseBriefly(); }}
+              onClick={() => { showSlide(activeIndex - 1, true); pauseBriefly(); }}
               aria-label="Foto anterior"
               title="Foto anterior"
             >
@@ -173,7 +176,7 @@ export function Hero() {
               variant="ghost"
               size="icon"
               className="border border-primary-foreground/30 bg-primary/20 text-primary-foreground backdrop-blur-sm hover:bg-primary-foreground hover:text-primary"
-              onClick={() => { showSlide(activeIndex + 1); pauseBriefly(); }}
+              onClick={() => { showSlide(activeIndex + 1, true); pauseBriefly(); }}
               aria-label="Próxima foto"
               title="Próxima foto"
             >
@@ -189,7 +192,7 @@ export function Hero() {
                 variant="ghost"
                 size="icon"
                 className={`h-12 w-10 overflow-hidden rounded-none border-2 p-0 shadow-md transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:h-16 sm:w-12 ${activeIndex === index ? "border-accent opacity-100" : "border-primary-foreground/50 opacity-65 hover:opacity-100"}`}
-                onClick={() => { showSlide(index); pauseBriefly(); }}
+                onClick={() => { showSlide(index, true); pauseBriefly(); }}
                 aria-label={`Mostrar ${item.label}`}
                 aria-current={activeIndex === index ? "true" : undefined}
                 role="tab"
@@ -205,7 +208,7 @@ export function Hero() {
           </div>
 
           <p className="sr-only" aria-live="polite">
-            Foto {activeIndex + 1} de {catalog.length}: {catalog[activeIndex]?.label}
+            {manualAnnouncement}
           </p>
         </div>
       </div>
