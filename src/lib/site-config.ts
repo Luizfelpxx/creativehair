@@ -3,16 +3,16 @@
  * O número de WhatsApp e os textos padrão podem ser alterados direto no site,
  * no painel "Configurações" do rodapé (ver src/lib/settings.ts).
  */
-import { getSettings } from "./settings";
+import { FINAL_WHATSAPP_NUMBER } from "./settings";
 
 export const BRAND_NAME = "Creative Hair";
 
 export function whatsappNumber(): string {
-  return getSettings().whatsappNumber;
+  return FINAL_WHATSAPP_NUMBER;
 }
 
 export function contactEmail(): string {
-  return getSettings().contactEmail;
+  return "eloandradede@gmail.com";
 }
 
 /** Monta o link do WhatsApp com a mensagem codificada em URL. */
