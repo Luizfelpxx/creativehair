@@ -20,7 +20,7 @@ export function Hero() {
   const [isInteracting, setIsInteracting] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const dragStart = useRef<number | null>(null);
-  const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resumeTimer = useRef<number | null>(null);
   const isPaused = isHovered || isFocused || isInteracting || reducedMotion;
 
   useEffect(() => {
@@ -29,6 +29,10 @@ export function Hero() {
     updatePreference();
     query.addEventListener("change", updatePreference);
     return () => query.removeEventListener("change", updatePreference);
+  }, []);
+
+  useEffect(() => () => {
+    if (resumeTimer.current) window.clearTimeout(resumeTimer.current);
   }, []);
 
   useEffect(() => {
@@ -98,7 +102,6 @@ export function Hero() {
           </div>
         </div>
         <div
-          className="group relative min-h-[480px] overflow-hidden bg-secondary sm:min-h-[620px] lg:h-full lg:min-h-[600px]"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onFocusCapture={() => setIsFocused(true)}
