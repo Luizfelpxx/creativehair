@@ -8,6 +8,13 @@
       "when": 1789995502878,
       "tag": "0000_create_customer_requests",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789995699718,
+      "tag": "0001_secure_requests_and_add_admin_roles",
+      "breakpoints": true
     }
   ]
 }
