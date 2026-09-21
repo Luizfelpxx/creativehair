@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { ProductGrid } from "@/components/ProductGrid";
+import { HairRecommendation } from "@/components/HairRecommendation";
 import { Services } from "@/components/Services";
 import { Wholesale } from "@/components/Wholesale";
 import { Differentials } from "@/components/Differentials";
@@ -38,6 +39,7 @@ function Index() {
       <main>
         <Hero />
         <About />
+        <HairRecommendation />
         <ProductGrid />
         <Services />
         <Wholesale />
