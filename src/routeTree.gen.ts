@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContatoRouteImport } from './routes/contato'
+import { Route as FreteRouteImport } from './routes/frete'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedSolicitacoesRouteImport } from './routes/_authenticated/solicitacoes'
 
@@ -35,6 +36,11 @@ const ContatoRoute = ContatoRouteImport.update({
   path: '/contato',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FreteRoute = FreteRouteImport.update({
+  id: '/frete',
+  path: '/frete',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/contato': typeof ContatoRoute
+  '/frete': typeof FreteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solicitacoes': typeof AuthenticatedSolicitacoesRoute
 }
@@ -58,6 +65,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/contato': typeof ContatoRoute
+  '/frete': typeof FreteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solicitacoes': typeof AuthenticatedSolicitacoesRoute
 }
@@ -67,20 +75,23 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/contato': typeof ContatoRoute
+  '/frete': typeof FreteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/solicitacoes': typeof AuthenticatedSolicitacoesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/contato' | '/sitemap.xml' | '/solicitacoes'
+  fullPaths:
+    '/' | '/auth' | '/contato' | '/frete' | '/sitemap.xml' | '/solicitacoes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/contato' | '/sitemap.xml' | '/solicitacoes'
+  to: '/' | '/auth' | '/contato' | '/frete' | '/sitemap.xml' | '/solicitacoes'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/contato'
+    | '/frete'
     | '/sitemap.xml'
     | '/_authenticated/solicitacoes'
   fileRoutesById: FileRoutesById
@@ -90,6 +101,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ContatoRoute: typeof ContatoRoute
+  FreteRoute: typeof FreteRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -121,6 +133,13 @@ declare module '@tanstack/react-router' {
       path: '/contato'
       fullPath: '/contato'
       preLoaderRoute: typeof ContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/frete': {
+      id: '/frete'
+      path: '/frete'
+      fullPath: '/frete'
+      preLoaderRoute: typeof FreteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -156,6 +175,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ContatoRoute: ContatoRoute,
+  FreteRoute: FreteRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
