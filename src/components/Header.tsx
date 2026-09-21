@@ -10,6 +10,7 @@ const LINKS = [
   { href: "#atacado", label: "Atacado" },
   { href: "#sobre", label: "Sobre" },
   { href: "/contato", label: "Contato" },
+  { href: "/frete", label: "Frete" },
 ];
 
 export function Header() {
@@ -50,6 +51,7 @@ export function Header() {
           <div className="hidden lg:flex lg:gap-6 lg:text-[11px] lg:font-medium lg:uppercase lg:tracking-[0.2em]">
             <a href="#sobre" className="transition-colors hover:text-accent">Sobre</a>
             <Link to="/contato" className="transition-colors hover:text-accent">Contato</Link>
+            <Link to="/frete" className="transition-colors hover:text-accent">Frete</Link>
           </div>
           <button
             type="button"
@@ -85,7 +87,7 @@ export function Header() {
           <ul className="flex flex-col gap-4 text-[11px] font-medium uppercase tracking-[0.2em]">
             {LINKS.map((link) => (
               <li key={link.href}>
-                {link.href.startsWith("/") ? <Link to={link.href as "/contato"} onClick={() => setMenuOpen(false)}>{link.label}</Link> : <a href={link.href} onClick={() => setMenuOpen(false)}>{link.label}</a>}
+                {link.href === "/contato" ? <Link to="/contato" onClick={() => setMenuOpen(false)}>{link.label}</Link> : link.href === "/frete" ? <Link to="/frete" onClick={() => setMenuOpen(false)}>{link.label}</Link> : <a href={link.href} onClick={() => setMenuOpen(false)}>{link.label}</a>}
               </li>
             ))}
           </ul>
