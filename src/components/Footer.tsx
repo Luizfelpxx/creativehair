@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSettings } from "@/lib/settings";
 import { Logo } from "./Logo";
 import { SettingsPanel } from "./SettingsPanel";
+import { Link } from "@tanstack/react-router";
 
 export function Footer() {
   const settings = useSettings();
@@ -42,9 +43,11 @@ export function Footer() {
           <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">Contato</h2>
           <ul className="space-y-2 text-sm opacity-70">
             <li>
-              <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>
+              <Link to="/contato">Formulário de contato</Link>
             </li>
+            <li><a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a></li>
             <li>WhatsApp: {settings.whatsappNumber}</li>
+            <li><Link to="/solicitacoes" className="text-[10px] uppercase tracking-widest text-accent">Solicitações</Link></li>
             <li>
               <button
                 type="button"

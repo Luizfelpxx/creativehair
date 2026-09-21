@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useCart } from "@/hooks/use-cart";
 import { Logo } from "./Logo";
 
@@ -8,7 +9,7 @@ const LINKS = [
   { href: "#servicos", label: "Serviços" },
   { href: "#atacado", label: "Atacado" },
   { href: "#sobre", label: "Sobre" },
-  { href: "#contato", label: "Contato" },
+  { href: "/contato", label: "Contato" },
 ];
 
 export function Header() {
@@ -47,11 +48,8 @@ export function Header() {
 
         <div className="flex shrink-0 items-center gap-6">
           <div className="hidden lg:flex lg:gap-6 lg:text-[11px] lg:font-medium lg:uppercase lg:tracking-[0.2em]">
-            {LINKS.slice(4).map((link) => (
-              <a key={link.href} href={link.href} className="transition-colors hover:text-accent">
-                {link.label}
-              </a>
-            ))}
+            <a href="#sobre" className="transition-colors hover:text-accent">Sobre</a>
+            <Link to="/contato" className="transition-colors hover:text-accent">Contato</Link>
           </div>
           <button
             type="button"
@@ -87,9 +85,7 @@ export function Header() {
           <ul className="flex flex-col gap-4 text-[11px] font-medium uppercase tracking-[0.2em]">
             {LINKS.map((link) => (
               <li key={link.href}>
-                <a href={link.href} onClick={() => setMenuOpen(false)}>
-                  {link.label}
-                </a>
+                {link.href.startsWith("/") ? <Link to={link.href as "/contato"} onClick={() => setMenuOpen(false)}>{link.label}</Link> : <a href={link.href} onClick={() => setMenuOpen(false)}>{link.label}</a>}
               </li>
             ))}
           </ul>
