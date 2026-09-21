@@ -11,3 +11,4 @@
 - [x] Abrir o WhatsApp automaticamente após a consultoria com todas as escolhas.
 - [x] Criar página de contato com registro, aviso por e-mail e continuidade no WhatsApp.
 - [x] Criar lista privada de solicitações com acesso administrativo.
+- [ ] Criar página de prazos e frete com valores por cidade — aguardando cidades, preços e prazos reais.
