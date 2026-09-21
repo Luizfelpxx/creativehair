@@ -56,7 +56,7 @@ function ShippingPage() {
               <article className="border border-border bg-background p-6 sm:p-8">
                 <div className="flex size-10 items-center justify-center bg-sky/45"><PackageCheck className="size-5 text-accent" /></div>
                 <p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.25em] text-accent">Demais bairros do Rio</p>
-                <h2 className="mt-2 font-serif text-3xl">R$ 45,00</h2>
+                <h2 className="mt-2 font-serif text-3xl">R$ 28,00</h2>
                 <p className="mt-4 text-sm leading-relaxed text-foreground/60">Tarifa padrão estimada para entrega urbana. O valor é confirmado conforme o endereço.</p>
                 <p className="mt-6 border-t border-border pt-4 text-xs text-foreground/55"><Clock3 className="mr-2 inline size-4" /> Até 2 dias úteis</p>
               </article>
