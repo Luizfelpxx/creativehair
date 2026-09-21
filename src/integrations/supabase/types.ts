@@ -14,7 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      customer_requests: {
+        Row: {
+          color: string | null
+          created_at: string
+          email: string | null
+          goal: string
+          id: string
+          length: string
+          name: string | null
+          recommendation_reason: string | null
+          recommendation_tip: string | null
+          recommended_product_id: string | null
+          recommended_product_name: string | null
+          request_type: string
+          weight: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          email?: string | null
+          goal: string
+          id?: string
+          length: string
+          name?: string | null
+          recommendation_reason?: string | null
+          recommendation_tip?: string | null
+          recommended_product_id?: string | null
+          recommended_product_name?: string | null
+          request_type: string
+          weight: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          email?: string | null
+          goal?: string
+          id?: string
+          length?: string
+          name?: string | null
+          recommendation_reason?: string | null
+          recommendation_tip?: string | null
+          recommended_product_id?: string | null
+          recommended_product_name?: string | null
+          request_type?: string
+          weight?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
