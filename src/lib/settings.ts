@@ -8,6 +8,7 @@ export const HAIR_PRICE_SIZES = ["45cm", "55cm", "60cm", "65cm", "70cm", "75cm"]
 export type HairPriceSize = (typeof HAIR_PRICE_SIZES)[number];
 export type HairPrices = Record<HairPriceSize, number>;
 export type HairWeight = "100g" | "500g";
+export const FINAL_WHATSAPP_NUMBER = "+5521999057833";
 
 export const REAL_HAIR_PRICES: HairPrices = {
   "45cm": 422,
@@ -45,7 +46,7 @@ export type SiteSettings = {
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
-  whatsappNumber: "+5521999057833",
+  whatsappNumber: FINAL_WHATSAPP_NUMBER,
   contactEmail: "eloandradede@gmail.com",
   productTemplate:
     "Olá! Vi o {produto}{detalhes} no site da Creative Hair e queria saber mais informações. Vocês têm disponível?",
@@ -74,6 +75,8 @@ function readStorage(): SiteSettings {
     return {
       ...DEFAULT_SETTINGS,
       ...saved,
+      // O contato oficial é fixo, inclusive para navegadores com configurações antigas salvas.
+      whatsappNumber: FINAL_WHATSAPP_NUMBER,
       hairPrices: { ...REAL_HAIR_PRICES, ...saved.hairPrices },
       hairPrices500g: { ...REAL_HAIR_PRICES_500G, ...saved.hairPrices500g },
     };

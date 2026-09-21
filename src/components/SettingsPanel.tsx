@@ -17,7 +17,6 @@ const FIELDS: {
   hint?: string;
   multiline?: boolean;
 }[] = [
-  { key: "whatsappNumber", label: "Número do WhatsApp", hint: "Formato: +5521999057833" },
   { key: "contactEmail", label: "E-mail comercial" },
   {
     key: "productTemplate",
@@ -46,10 +45,6 @@ const FIELDS: {
 ];
 
 function validate(values: SiteSettings): string {
-  const digits = values.whatsappNumber.replace(/\D/g, "");
-  if (digits.length < 12 || digits.length > 15) {
-    return "Informe o WhatsApp com país e DDD, ex: +55 21 99905-7833.";
-  }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.contactEmail)) {
     return "Informe um e-mail válido.";
   }
@@ -108,7 +103,7 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
           <div>
             <h2 className="font-serif text-2xl">Configurações</h2>
             <p className="mt-1 text-xs text-foreground/50">
-              Altere o WhatsApp e os textos padrão sem mexer no código.
+              Altere os textos padrão e os preços sem mexer no código. O WhatsApp oficial é +55 21 99905-7833.
             </p>
           </div>
           <button
