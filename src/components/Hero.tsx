@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import pretoOndulado from "@/assets/cabelo-preto-ondulado.jpeg.asset.json";
@@ -15,7 +15,26 @@ const catalog = [
 
 export function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [manualAnnouncement, setManualAnnouncement] = useState("");
+  const dragStart = useRef<number | null>(null);
+  const resumeTimer = useRef<number | null>(null);
+  const isPaused = isHovered || isFocused || isInteracting || reducedMotion;
+
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setReducedMotion(query.matches);
+    updatePreference();
+    query.addEventListener("change", updatePreference);
+    return () => query.removeEventListener("change", updatePreference);
+  }, []);
+
+  useEffect(() => () => {
+    if (resumeTimer.current) window.clearTimeout(resumeTimer.current);
+  }, []);
 
   useEffect(() => {
     if (isPaused) return;
@@ -25,8 +44,41 @@ export function Hero() {
     return () => window.clearInterval(timer);
   }, [isPaused]);
 
-  const showSlide = (index: number) => {
-    setActiveIndex((index + catalog.length) % catalog.length);
+  const showSlide = (index: number, announce = false) => {
+    const nextIndex = (index + catalog.length) % catalog.length;
+    setActiveIndex(nextIndex);
+    if (announce) setManualAnnouncement(`Foto ${nextIndex + 1} de ${catalog.length}: ${catalog[nextIndex]?.label}`);
+  };
+
+  const pauseBriefly = () => {
+    setIsInteracting(true);
+    if (resumeTimer.current) window.clearTimeout(resumeTimer.current);
+    resumeTimer.current = window.setTimeout(() => setIsInteracting(false), 3500);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "ArrowLeft") showSlide(activeIndex - 1, true);
+    else if (event.key === "ArrowRight") showSlide(activeIndex + 1, true);
+    else if (event.key === "Home") showSlide(0, true);
+    else if (event.key === "End") showSlide(catalog.length - 1, true);
+    else return;
+    event.preventDefault();
+    pauseBriefly();
+  };
+
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    dragStart.current = event.clientX;
+    setIsInteracting(true);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    if (dragStart.current !== null) {
+      const distance = event.clientX - dragStart.current;
+      if (Math.abs(distance) > 45) showSlide(activeIndex + (distance < 0 ? 1 : -1), true);
+    }
+    dragStart.current = null;
+    pauseBriefly();
   };
 
   return (
@@ -53,20 +105,28 @@ export function Hero() {
           </div>
         </div>
         <div
-          className="group relative min-h-[480px] overflow-hidden bg-secondary sm:min-h-[620px] lg:h-full lg:min-h-[600px]"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          onFocusCapture={() => setIsPaused(true)}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onFocusCapture={() => setIsFocused(true)}
           onBlurCapture={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget)) setIsPaused(false);
+            if (!event.currentTarget.contains(event.relatedTarget)) setIsFocused(false);
           }}
+          onKeyDown={handleKeyDown}
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={() => {
+            dragStart.current = null;
+            pauseBriefly();
+          }}
+          tabIndex={0}
+          className="group relative min-h-[480px] touch-pan-y select-none overflow-hidden bg-secondary outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset sm:min-h-[620px] lg:h-full lg:min-h-[600px]"
           aria-roledescription="carrossel"
           aria-label="Catálogo de cabelos Creative Hair"
         >
           {catalog.map((item, index) => (
             <div
               key={item.label}
-              className={`absolute inset-0 transition-[opacity,transform] duration-1000 ease-out motion-reduce:transition-none ${
+              className={`absolute inset-0 transition-[opacity,transform] duration-1000 ease-out motion-reduce:transform-none motion-reduce:transition-none ${
                 activeIndex === index
                   ? "z-10 scale-100 opacity-100"
                   : "pointer-events-none scale-105 opacity-0"
@@ -105,7 +165,7 @@ export function Hero() {
               variant="ghost"
               size="icon"
               className="border border-primary-foreground/30 bg-primary/20 text-primary-foreground backdrop-blur-sm hover:bg-primary-foreground hover:text-primary"
-              onClick={() => showSlide(activeIndex - 1)}
+              onClick={() => { showSlide(activeIndex - 1, true); pauseBriefly(); }}
               aria-label="Foto anterior"
               title="Foto anterior"
             >
@@ -116,7 +176,7 @@ export function Hero() {
               variant="ghost"
               size="icon"
               className="border border-primary-foreground/30 bg-primary/20 text-primary-foreground backdrop-blur-sm hover:bg-primary-foreground hover:text-primary"
-              onClick={() => showSlide(activeIndex + 1)}
+              onClick={() => { showSlide(activeIndex + 1, true); pauseBriefly(); }}
               aria-label="Próxima foto"
               title="Próxima foto"
             >
@@ -124,23 +184,21 @@ export function Hero() {
             </Button>
           </div>
 
-          <div className="absolute right-5 top-1/2 z-30 flex -translate-y-1/2 flex-col gap-3 sm:right-8">
+          <div className="absolute left-5 top-5 z-30 flex gap-2 sm:left-8 sm:top-8" role="tablist" aria-label="Escolher foto do catálogo">
             {catalog.map((item, index) => (
               <Button
                 key={item.label}
                 type="button"
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 p-0 hover:bg-transparent"
-                onClick={() => showSlide(index)}
+                className={`h-12 w-10 overflow-hidden rounded-none border-2 p-0 shadow-md transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:h-16 sm:w-12 ${activeIndex === index ? "border-accent opacity-100" : "border-primary-foreground/50 opacity-65 hover:opacity-100"}`}
+                onClick={() => { showSlide(index, true); pauseBriefly(); }}
                 aria-label={`Mostrar ${item.label}`}
                 aria-current={activeIndex === index ? "true" : undefined}
+                role="tab"
+                aria-selected={activeIndex === index}
               >
-                <span
-                  className={`block w-1 rounded-full bg-primary-foreground transition-all duration-300 ${
-                    activeIndex === index ? "h-6 opacity-100" : "h-2 opacity-40"
-                  }`}
-                />
+                <img src={item.src} alt="" className="size-full object-cover" draggable={false} />
               </Button>
             ))}
           </div>
@@ -150,7 +208,7 @@ export function Hero() {
           </div>
 
           <p className="sr-only" aria-live="polite">
-            Foto {activeIndex + 1} de {catalog.length}: {catalog[activeIndex]?.label}
+            {manualAnnouncement}
           </p>
         </div>
       </div>

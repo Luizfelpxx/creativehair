@@ -114,7 +114,7 @@ export function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <article ref={reveal.ref} className={`group ${reveal.className}`}>
+    <article id={`produto-${product.id}`} ref={reveal.ref} className={`group scroll-mt-24 ${reveal.className}`}>
       <div className="relative mb-6 aspect-3/4 overflow-hidden bg-blush/30">
         <ProductImage
           src={image}
