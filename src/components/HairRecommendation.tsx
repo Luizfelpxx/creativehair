@@ -1,8 +1,10 @@
 import { useState, type FormEvent } from "react";
-import { Sparkles } from "lucide-react";
+import { MessageCircle, Sparkles } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { recommendHair } from "@/lib/hair-recommendation.functions";
+import { saveConsultationRequest } from "@/lib/customer-requests.functions";
+import { openWhatsapp } from "@/lib/site-config";
 
 const lengths = ["45cm", "55cm", "60cm", "65cm", "70cm", "75cm"] as const;
 const weights = ["100g", "500g"] as const;
@@ -24,6 +26,7 @@ type Recommendation = Awaited<ReturnType<typeof recommendHair>>;
 
 export function HairRecommendation() {
   const getRecommendation = useServerFn(recommendHair);
+  const saveRequest = useServerFn(saveConsultationRequest);
   const [length, setLength] = useState("");
   const [weight, setWeight] = useState("");
   const [color, setColor] = useState("");
@@ -52,6 +55,21 @@ export function HairRecommendation() {
         },
       });
       setResult(recommendation);
+      try {
+        await saveRequest({ data: {
+          length: length as (typeof lengths)[number],
+          weight: weight as (typeof weights)[number],
+          color: color as (typeof colors)[number],
+          goal: goal as (typeof goals)[number],
+          recommendedProductId: recommendation.productId,
+          recommendedProductName: recommendation.productName,
+          recommendationReason: recommendation.reason,
+          recommendationTip: recommendation.tip,
+        } });
+      } catch {
+        setError("A recomendação foi concluída, mas não pôde ser adicionada à lista.");
+      }
+      openWhatsapp(`Olá! Fiz a consultoria no site da Creative Hair.\n\nComprimento: ${length}\nGramatura: ${weight}\nCor: ${color}\nObjetivo: ${goal}\nProduto recomendado: ${recommendation.productName}\n\nGostaria de confirmar a disponibilidade e receber mais orientações.`);
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "Não foi possível concluir a recomendação agora.");
     } finally {
@@ -97,6 +115,9 @@ export function HairRecommendation() {
                   <a href={`#produto-${result.productId}`} className="mt-4 inline-block text-xs font-semibold uppercase tracking-widest text-foreground underline decoration-accent underline-offset-4">
                     Ver produto recomendado
                   </a>
+                  <Button type="button" variant="outline" className="mt-4 w-full rounded-none" onClick={() => openWhatsapp(`Olá! Fiz a consultoria no site da Creative Hair.\n\nComprimento: ${length}\nGramatura: ${weight}\nCor: ${color}\nObjetivo: ${goal}\nProduto recomendado: ${result.productName}\n\nGostaria de confirmar a disponibilidade e receber mais orientações.`)}>
+                    <MessageCircle /> Abrir WhatsApp novamente
+                  </Button>
                 </div>
               )}
             </div>

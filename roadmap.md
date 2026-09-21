@@ -8,3 +8,6 @@
 - [x] Adicionar miniaturas, gesto de arrastar e pausa por interação à galeria.
 - [x] Completar teclado, foco, rótulos e redução de movimento na galeria.
 - [x] Validar vitrine, carrinho, configurações e visual em celular e computador.
+- [x] Abrir o WhatsApp automaticamente após a consultoria com todas as escolhas.
+- [x] Criar página de contato com registro, aviso por e-mail e continuidade no WhatsApp.
+- [x] Criar lista privada de solicitações com acesso administrativo.
