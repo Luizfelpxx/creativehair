@@ -36,6 +36,7 @@ export function Footer() {
             <li>
               <a href="#sobre">Sobre</a>
             </li>
+            <li><Link to="/frete">Prazos e frete</Link></li>
           </ul>
         </div>
 
@@ -46,7 +47,7 @@ export function Footer() {
               <Link to="/contato">Formulário de contato</Link>
             </li>
             <li><a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a></li>
-            <li>WhatsApp: {settings.whatsappNumber}</li>
+            <li>WhatsApp: +55 21 99905-7833</li>
             <li><Link to="/solicitacoes" className="text-[10px] uppercase tracking-widest text-accent">Solicitações</Link></li>
             <li>
               <button
