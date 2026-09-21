@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import pretoOndulado from "@/assets/cabelo-preto-ondulado.jpeg.asset.json";
-import castanhoCacheado from "@/assets/cabelo-castanho-cacheado.jpeg.asset.json";
-import pretoLiso from "@/assets/cabelo-preto-liso.jpeg.asset.json";
-import morenoIluminado from "@/assets/cabelo-moreno-iluminado-ondulado.jpeg.asset.json";
+import pretoOndulado from "@/assets/cabelo-preto-ondulado.jpeg";
+import castanhoCacheado from "@/assets/cabelo-castanho-cacheado.jpeg";
+import pretoLiso from "@/assets/cabelo-preto-liso.jpeg";
+import morenoIluminado from "@/assets/cabelo-moreno-iluminado-ondulado.jpeg";
 
 const catalog = [
-  { src: pretoOndulado.url, label: "Preto ondulado", position: "object-center" },
-  { src: castanhoCacheado.url, label: "Castanho cacheado", position: "object-center" },
-  { src: pretoLiso.url, label: "Preto liso", position: "object-center" },
-  { src: morenoIluminado.url, label: "Moreno iluminado", position: "object-center" },
+  { src: pretoOndulado, label: "Preto ondulado", position: "object-center" },
+  { src: castanhoCacheado, label: "Castanho cacheado", position: "object-center" },
+  { src: pretoLiso, label: "Preto liso", position: "object-center" },
+  { src: morenoIluminado, label: "Moreno iluminado", position: "object-center" },
 ];
 
 export function Hero() {
